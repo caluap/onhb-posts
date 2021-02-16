@@ -1,0 +1,14 @@
+{
+  "formats": {
+    "facebook_feed": { "w": 1200, "h": 630 },
+    "twitter_feed": { "w": 1024, "h": 512 },
+    "instagram_feed": { "w": 1080, "h": 1080 },
+    "instagram_stories": { "w": 1080, "h": 1920 }
+  },
+  "editions": {
+    "ONHB13": {},
+    "ONHB12": {},
+    "Pré-2020": {},
+    "Neutro": {}
+  }
+}
