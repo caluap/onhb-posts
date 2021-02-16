@@ -94,6 +94,10 @@ export default {
         }
       };
 
+      s.windowResized = () => {
+        s.updateZoom();
+      };
+
       s.updateFormat = () => {
         let dimensions = this.config.formats[this.socialMedia];
         s.resizeCanvas(dimensions.w, dimensions.h);
