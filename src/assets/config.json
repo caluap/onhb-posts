@@ -6,9 +6,21 @@
     "instagram_stories": { "w": 1080, "h": 1920 }
   },
   "editions": {
-    "ONHB13": {},
-    "ONHB12": {},
-    "Pré-2020": {},
-    "Neutro": {}
+    "ONHB13": {
+      "tintPattern": false,
+      "background": "#000000"
+    },
+    "ONHB12": {
+      "tintPattern": false,
+      "background": "#000000"
+    },
+    "Pré-2020": {
+      "tintPattern": true,
+      "background": "#cb0072"
+    },
+    "Neutro": {
+      "tintPattern": true,
+      "background": "#000000"
+    }
   }
 }

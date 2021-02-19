@@ -6,17 +6,31 @@
     <button @click="clickety()">Oi!</button>
     <div id="toolbar">
       <div>
-        <template v-for="(value, format) in formats">
+        <template v-for="(value, formatKey) in formats">
           <input
             type="radio"
-            :id="`format-${format}`"
-            :key="`format-radio-${format}`"
-            :value="format"
-            v-model="socialMedia"
+            :id="`format-${formatKey}`"
+            :key="`format-radio-${formatKey}`"
+            :value="formatKey"
+            v-model="format"
             name="social_media_format"
           />
-          <label :key="`format-label-${format}`" :for="`format-${format}`"
+          <label :key="`format-label-${formatKey}`" :for="`format-${formatKey}`"
             >{{ value }}
+          </label>
+        </template>
+      </div>
+      <div>
+        <template v-for="(pattern, key) in patterns">
+          <input
+            type="checkbox"
+            :id="`pattern-${key}`"
+            v-model="pattern.checked"
+            :key="`pattern-${key}`"
+            @change="p5instance.draw()"
+          />
+          <label :key="`pattern-label-${key}`" :for="`pattern-${key}`"
+            >{{ pattern.name }}
           </label>
         </template>
       </div>
@@ -35,19 +49,28 @@ export default {
       sketch: null,
       p5instance: null,
       canvas: null,
-      config: json,
-      socialMedia: "facebook_feed",
+      configRef: json,
+      tint: 1.0,
+      patterns: {
+        circle: { name: "Circular", checked: false },
+        border: { name: "Borda", checked: false },
+        full: { name: "Pleno", checked: false },
+        one_third: { name: "⅓", checked: false },
+        two_thirds: { name: "⅔", checked: false },
+      },
+      format: "facebook_feed",
       formats: {
         facebook_feed: "Facebook",
         twitter_feed: "Twitter",
         instagram_feed: "Timeline Instagram",
         instagram_stories: "Stories Instagram",
       },
-      editions: ["ONHB13", "ONHB12", "Pré-2020", "Neutro"],
+      edition: "ONHB12",
+      editions: ["ONHB12", "Pré-2020", "Neutro"],
     };
   },
   watch: {
-    socialMedia: function () {
+    format: function () {
       this.p5instance.updateFormat();
     },
   },
@@ -60,7 +83,13 @@ export default {
   },
   mounted() {
     this.sketch = (s) => {
-      let mainFont, auxFont, auxFont2, logo;
+      let mainFont,
+        auxFont,
+        auxFont2,
+        logo,
+        userImg = null,
+        originalUserImg = null,
+        loadedPatterns = {};
 
       s.preload = () => {
         mainFont = s.loadFont("./fonts/CooperHewitt-Semibold.otf");
@@ -71,8 +100,8 @@ export default {
 
       s.setup = () => {
         this.canvas = s.createCanvas(
-          this.config.formats[this.socialMedia].w,
-          this.config.formats[this.socialMedia].h
+          this.configRef.formats[this.format].w,
+          this.configRef.formats[this.format].h
         );
         this.canvas.parent("canvas-container");
         s.updateZoom();
@@ -82,9 +111,9 @@ export default {
       s.updateZoom = () => {
         // debugger; // eslint-disable-line no-debugger
         let availableHSpace = document.getElementById("desktop").clientHeight,
-          ratioH = availableHSpace / this.config.formats[this.socialMedia].h,
+          ratioH = availableHSpace / this.configRef.formats[this.format].h,
           availableWSpace = document.getElementById("desktop").clientWidth,
-          ratioW = availableWSpace / this.config.formats[this.socialMedia].w;
+          ratioW = availableWSpace / this.configRef.formats[this.format].w;
 
         if (ratioW < 1 || ratioH < 1) {
           let scale = Math.min(ratioW, ratioH);
@@ -99,10 +128,11 @@ export default {
       };
 
       s.updateFormat = () => {
-        let dimensions = this.config.formats[this.socialMedia];
+        let dimensions = this.configRef.formats[this.format];
         s.resizeCanvas(dimensions.w, dimensions.h);
         s.updateZoom();
       };
+
       s.updatePattern = () => {};
       s.updateTextVars = () => {};
 
@@ -114,15 +144,79 @@ export default {
         s.saveCanvas(this.canvas, fn, "jpg");
       };
 
+      s.drawImages = () => {
+      };
+
+      s.handleUpload = (file) => {
+      };
+
+      s.removeImage = () => {
+      };
+
+      s.drawPattern = () => {
+        for (const [key, value] of Object.entries(this.patterns)) {
+          if (value.checked) {
+            // first time for a given edition
+            if (!(this.edition in loadedPatterns)) {
+              loadedPatterns[this.edition] = {};
+            }
+
+            // first time for a given social media format
+            if (!(this.format in loadedPatterns[this.edition])) {
+              loadedPatterns[this.edition][this.format] = {};
+            }
+
+            // has this particular pattern been loaded?
+            if (!(key in loadedPatterns[this.edition][this.format])) {
+              let path = `./img/patterns/${this.edition}/${this.format}/${key}.png`;
+              loadedPatterns[this.edition][this.format][key] = s.loadImage(
+                path,
+                () => {
+                  console.log(
+                    `Loaded the pattern for ${this.edition} / ${this.format} / ${key}`
+                  );
+                  s.updateCanvas();
+                }
+              );
+            } else {
+              if (this.configRef.editions[this.edition].tintPattern) {
+                if (userImg) {
+                  s.tint("#ff008f");
+                } else {
+                  s.tint("#cb0072");
+                }
+              }
+              s.image(
+                loadedPatterns[this.edition][this.format][key],
+                0,
+                0,
+                s.width,
+                s.height
+              );
+              s.noTint();
+            }
+          }
+        }
+      };
+
+      s.drawLogo = () => {};
+      s.drawText = () => {};
+
       s.draw = () => {
-        s.background("#ff00ff");
+        s.background(0);
+
+        // s.drawImages();
+        s.drawPattern();
+
+        // s.drawLogo();
+        // s.drawText();
+
         s.noLoop();
       };
 
-      // create methods:
-      // s.yourMethod = (x, y) => {
-      //   // your method
-      // };
+      s.updateCanvas = () => {
+        s.draw();
+      };
     };
 
     this.p5instance = new P5(this.sketch, this.canvas);
@@ -135,6 +229,10 @@ $p: 3rem;
 
 body {
   margin: 0;
+}
+
+canvas {
+  box-shadow: 0 2px 6px black;
 }
 
 #toolbar {
@@ -156,13 +254,12 @@ body {
 }
 
 #desktop {
-  // overflow-y: scroll;
   position: fixed;
   left: $p;
   top: 0;
   bottom: 0;
   right: 0;
-  background: black;
+  background: #666;
   display: flex;
   align-items: center;
   justify-content: center;
