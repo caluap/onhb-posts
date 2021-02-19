@@ -90,7 +90,8 @@ export default {
         logo,
         userImg = null,
         originalUserImg = null,
-        loadedPatterns = {};
+        loadedPatterns = {},
+        margin = 40;
 
       s.preload = () => {
         mainFont = s.loadFont("./fonts/CooperHewitt-Semibold.otf");
@@ -112,7 +113,7 @@ export default {
 
         this.canvas.parent("canvas-container");
         s.updateZoom();
-        console.log(`${mainFont}/${auxFont}/${auxFont2}/${logo}`);
+        console.log(`${mainFont}/${auxFont}/${auxFont2}`);
       };
 
       s.updateZoom = () => {
@@ -243,7 +244,13 @@ export default {
         }
       };
 
-      s.drawLogo = () => {};
+      s.drawLogo = () => {
+        let logoSize = Math.max(s.width * 0.1, 90);
+        let x = s.width - margin - logoSize;
+        let y = s.height - margin - logoSize;
+        s.image(logo, x, y, logoSize, logoSize);
+      };
+
       s.drawText = () => {};
 
       s.draw = () => {
@@ -252,7 +259,7 @@ export default {
         s.drawImages();
         s.drawPattern();
 
-        // s.drawLogo();
+        s.drawLogo();
         // s.drawText();
 
         s.noLoop();
