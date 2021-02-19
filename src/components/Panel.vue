@@ -1,6 +1,8 @@
 <template>
   <section>
-    <h2 v-if="title != ''">{{ title }}</h2>
+    <div class="title">
+      <h2 v-if="title != ''">{{ title }}</h2>
+    </div>
     <div class="slot">
       <slot></slot>
     </div>
@@ -38,6 +40,7 @@ section {
   background: $panel_c;
 
   padding: 1rem;
+  padding-right: $p/2 + 1rem;
 }
 
 .slot {
@@ -46,19 +49,25 @@ section {
   gap: 1rem;
 }
 
-h2 {
-  display: block;
+.title {
   background: $selection;
-  color: white;
-  writing-mode: vertical-lr;
 
   position: absolute;
   right: 0;
   bottom: 0;
   top: 0;
-  padding: 1rem 0.5rem;
+  padding: 1rem;
+  width: $p/2;
 
-  font-weight: 600;
-  @include fs(1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h2 {
+  color: white;
+  writing-mode: vertical-lr;
+
+  font-weight: 500;
+  @include fs(0);
 }
 </style>

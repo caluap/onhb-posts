@@ -26,18 +26,67 @@
       />
     </div>
     <panel v-show="currentPanel == 'format-picker'" title="Seleção de formato">
-      <template v-for="(value, formatKey) in formats">
-        <div :key="`format-radio-${formatKey}`">
-          <input
-            type="radio"
-            :id="`format-${formatKey}`"
-            :value="formatKey"
-            v-model="format"
-            name="social_media_format"
+      <div class="radio-container">
+        <input
+          type="radio"
+          id="format-instagram_feed"
+          value="instagram_feed"
+          v-model="format"
+          name="social_media_format"
+        />
+        <label for="format-instagram_feed"
+          ><img
+            src="img/instagram-brands.svg"
+            alt="Small camera icon (Instagram)"
           />
-          <label :for="`format-${formatKey}`">{{ value }} </label>
-        </div>
-      </template>
+          Feed</label
+        >
+      </div>
+      <div class="radio-container">
+        <input
+          type="radio"
+          id="format-instagram_stories"
+          value="instagram_stories"
+          v-model="format"
+          name="social_media_format"
+        />
+        <label for="format-instagram_stories"
+          ><img
+            src="img/instagram-brands.svg"
+            alt="Small camera icon (Instagram)"
+          />
+          Stories</label
+        >
+      </div>
+      <div class="radio-container">
+        <input
+          type="radio"
+          id="format-facebook_feed"
+          value="facebook_feed"
+          v-model="format"
+          name="social_media_format"
+        />
+        <label for="format-facebook_feed"
+          ><img
+            src="img/facebook-brands.svg"
+            alt="The banner of an evil empire (Facebook)"
+          />
+          Facebook</label
+        >
+      </div>
+      <div class="radio-container">
+        <input
+          type="radio"
+          id="format-twitter_feed"
+          value="twitter_feed"
+          v-model="format"
+          name="social_media_format"
+        />
+        <label for="format-twitter_feed"
+          ><img src="img/twitter-brands.svg" alt="A small bird (Twitter)" />
+          Feed</label
+        >
+      </div>
     </panel>
     <panel v-show="currentPanel == 'text'" title="Caixas de texto" />
     <panel v-show="currentPanel == 'image'" title="Upload de imagem">
@@ -381,5 +430,30 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.radio-container {
+  label {
+    background-color: rgba(255, 255, 255, 0.25);
+    transition: all 0.5s ease;
+    padding: 0.5rem 0.75rem;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+
+  input {
+    display: none;
+    &:checked ~ label {
+      background-color: white;
+    }
+  }
+  img {
+    height: 1rem;
+  }
 }
 </style>
