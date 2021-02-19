@@ -1,7 +1,9 @@
 <template>
   <section>
     <h2 v-if="title != ''">{{ title }}</h2>
-    <slot></slot>
+    <div class="slot">
+      <slot></slot>
+    </div>
   </section>
 </template>
 
@@ -38,6 +40,12 @@ section {
   padding: 1rem;
 }
 
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 h2 {
   display: block;
   background: $selection;
@@ -50,6 +58,7 @@ h2 {
   top: 0;
   padding: 1rem 0.5rem;
 
-  @include fs(0);
+  font-weight: 600;
+  @include fs(1);
 }
 </style>

@@ -27,17 +27,16 @@
     </div>
     <panel v-show="currentPanel == 'format-picker'" title="Seleção de formato">
       <template v-for="(value, formatKey) in formats">
-        <input
-          type="radio"
-          :id="`format-${formatKey}`"
-          :key="`format-radio-${formatKey}`"
-          :value="formatKey"
-          v-model="format"
-          name="social_media_format"
-        />
-        <label :key="`format-label-${formatKey}`" :for="`format-${formatKey}`"
-          >{{ value }}
-        </label>
+        <div :key="`format-radio-${formatKey}`">
+          <input
+            type="radio"
+            :id="`format-${formatKey}`"
+            :value="formatKey"
+            v-model="format"
+            name="social_media_format"
+          />
+          <label :for="`format-${formatKey}`">{{ value }} </label>
+        </div>
       </template>
     </panel>
     <panel v-show="currentPanel == 'text'" title="Caixas de texto" />
@@ -335,10 +334,15 @@ export default {
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap");
 @import "@/assets/css/_definitions.scss";
 
 body {
   margin: 0;
+  &,
+  * {
+    font-family: "Inter", sans-serif !important;
+  }
 }
 
 canvas {
