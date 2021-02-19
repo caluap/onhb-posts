@@ -34,6 +34,7 @@
           </label>
         </template>
       </div>
+      <div id="img-input-container"></div>
     </div>
   </div>
 </template>
@@ -103,6 +104,12 @@ export default {
           this.configRef.formats[this.format].w,
           this.configRef.formats[this.format].h
         );
+
+        let imgInput = s.createFileInput(s.handleUpload);
+        imgInput.id("img-upload");
+        let container = s.select("#img-input-container");
+        container.child(imgInput);
+
         this.canvas.parent("canvas-container");
         s.updateZoom();
         console.log(`${mainFont}/${auxFont}/${auxFont2}/${logo}`);
@@ -145,12 +152,49 @@ export default {
       };
 
       s.drawImages = () => {
+        if (userImg) {
+          s.tint(203, 0, 114);
+          let ratio,
+            rCanv = s.width / s.height,
+            rImg = userImg.width / userImg.height;
+
+          if (rCanv >= rImg) {
+            ratio = s.width / userImg.width;
+          } else {
+            ratio = s.height / userImg.height;
+          }
+          let newW = userImg.width * ratio,
+            newH = userImg.height * ratio,
+            x = s.width / 2 - newW / 2,
+            y = s.height / 2 - newH / 2;
+
+          s.image(userImg, x, y, newW, newH);
+
+          let alpha = 255 * (1 - this.tint);
+          s.tint(255, alpha);
+          s.image(originalUserImg, x, y, newW, newH);
+
+          s.noTint();
+        }
       };
 
       s.handleUpload = (file) => {
+        if (file.type === "image") {
+          userImg = s.loadImage(file.data, () => {
+            originalUserImg = userImg.get();
+            console.log(originalUserImg);
+            userImg.filter(s.GRAY);
+            s.updateCanvas();
+          });
+        }
       };
 
       s.removeImage = () => {
+        if (userImg) {
+          userImg = null;
+          originalUserImg = null;
+          s.updateCanvas();
+        }
       };
 
       s.drawPattern = () => {
@@ -205,7 +249,7 @@ export default {
       s.draw = () => {
         s.background(0);
 
-        // s.drawImages();
+        s.drawImages();
         s.drawPattern();
 
         // s.drawLogo();
