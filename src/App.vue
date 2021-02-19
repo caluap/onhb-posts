@@ -251,7 +251,32 @@ export default {
         s.image(logo, x, y, logoSize, logoSize);
       };
 
-      s.drawText = () => {};
+      s.drawText = () => {
+        s.textFont(mainFont);
+        s.textAlign(s.LEFT, s.TOP);
+        s.fill(255);
+
+        let w = (s.width * 2) / 3 - margin;
+        let yMainText = 60; //sliderYMainText.value();
+        let fsMainText = 40; //sliderFsMainText.value();
+
+        s.textSize(fsMainText);
+        s.textLeading((fsMainText * 4) / 3);
+        s.text(
+          `data.text.mainText`,
+          margin,
+          yMainText,
+          w,
+          s.height - yMainText
+        );
+
+        let yAuxText = 200;
+        let fsAuxText = 20;
+        s.textFont(auxFont);
+        s.textSize(fsAuxText);
+        s.textLeading((fsAuxText * 4) / 3);
+        s.text(`data.text.auxText`, margin, yAuxText, w, s.height - yAuxText);
+      };
 
       s.draw = () => {
         s.background(0);
@@ -260,7 +285,7 @@ export default {
         s.drawPattern();
 
         s.drawLogo();
-        // s.drawText();
+        s.drawText();
 
         s.noLoop();
       };
