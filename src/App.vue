@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="desktop">
+    <div id="desktop" @click="openPanel()">
       <div id="canvas-container"></div>
     </div>
     <div id="toolbar">
@@ -24,47 +24,42 @@
         :selected="currentPanel == 'pattern-picker'"
         @click.native="openPanel('pattern-picker')"
       />
-
-      <div>
-        <template v-for="(value, formatKey) in formats">
-          <input
-            type="radio"
-            :id="`format-${formatKey}`"
-            :key="`format-radio-${formatKey}`"
-            :value="formatKey"
-            v-model="format"
-            name="social_media_format"
-          />
-          <label :key="`format-label-${formatKey}`" :for="`format-${formatKey}`"
-            >{{ value }}
-          </label>
-        </template>
-      </div>
-      <div>
-        <template v-for="(pattern, key) in patterns">
-          <input
-            type="checkbox"
-            :id="`pattern-${key}`"
-            v-model="pattern.checked"
-            :key="`pattern-${key}`"
-            @change="p5instance.draw()"
-          />
-          <label :key="`pattern-label-${key}`" :for="`pattern-${key}`"
-            >{{ pattern.name }}
-          </label>
-        </template>
-      </div>
-      <div id="img-input-container"></div>
     </div>
     <panel v-show="currentPanel == 'format-picker'" title="Seleção de formato">
-      <p>Fuck the police</p>
+      <template v-for="(value, formatKey) in formats">
+        <input
+          type="radio"
+          :id="`format-${formatKey}`"
+          :key="`format-radio-${formatKey}`"
+          :value="formatKey"
+          v-model="format"
+          name="social_media_format"
+        />
+        <label :key="`format-label-${formatKey}`" :for="`format-${formatKey}`"
+          >{{ value }}
+        </label>
+      </template>
     </panel>
     <panel v-show="currentPanel == 'text'" title="Caixas de texto" />
-    <panel v-show="currentPanel == 'image'" title="Upload de imagem" />
+    <panel v-show="currentPanel == 'image'" title="Upload de imagem">
+      <div id="img-input-container"></div>
+    </panel>
     <panel
       v-show="currentPanel == 'pattern-picker'"
       title="Escolha de padrão gráfico tematizado"
-    />
+      ><template v-for="(pattern, key) in patterns">
+        <input
+          type="checkbox"
+          :id="`pattern-${key}`"
+          v-model="pattern.checked"
+          :key="`pattern-${key}`"
+          @change="p5instance.draw()"
+        />
+        <label :key="`pattern-label-${key}`" :for="`pattern-${key}`"
+          >{{ pattern.name }}
+        </label>
+      </template>
+    </panel>
   </div>
 </template>
 
@@ -113,7 +108,7 @@ export default {
       this.p5instance.redraw();
       this.p5instance.saveImg();
     },
-    openPanel: function (whichPanel) {
+    openPanel: function (whichPanel = "") {
       if (this.currentPanel == whichPanel) {
         this.currentPanel = "";
       } else {
