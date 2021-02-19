@@ -3,8 +3,28 @@
     <div id="desktop">
       <div id="canvas-container"></div>
     </div>
-    <button @click="clickety()">Oi!</button>
     <div id="toolbar">
+      <panel-toggle
+        icon-src="./img/icons/format-picker.svg"
+        :selected="currentPanel == 'format-picker'"
+        @click.native="openPanel('format-picker')"
+      />
+      <panel-toggle
+        icon-src="./img/icons/text.svg"
+        :selected="currentPanel == 'text'"
+        @click.native="openPanel('text')"
+      />
+      <panel-toggle
+        icon-src="./img/icons/image.svg"
+        :selected="currentPanel == 'image'"
+        @click.native="openPanel('image')"
+      />
+      <panel-toggle
+        icon-src="./img/icons/pattern-picker.svg"
+        :selected="currentPanel == 'pattern-picker'"
+        @click.native="openPanel('pattern-picker')"
+      />
+
       <div>
         <template v-for="(value, formatKey) in formats">
           <input
@@ -36,17 +56,29 @@
       </div>
       <div id="img-input-container"></div>
     </div>
+    <panel v-show="currentPanel == 'format-picker'" title="Seleção de formato">
+      <p>Fuck the police</p>
+    </panel>
+    <panel v-show="currentPanel == 'text'" title="Caixas de texto" />
+    <panel v-show="currentPanel == 'image'" title="Upload de imagem" />
+    <panel
+      v-show="currentPanel == 'pattern-picker'"
+      title="Escolha de padrão gráfico tematizado"
+    />
   </div>
 </template>
 
 <script>
 import P5 from "p5";
 import json from "@/assets/config.json";
+import Panel from "./components/Panel";
+import PanelToggle from "./components/PanelToggle.vue";
 
 export default {
   name: "App",
   data() {
     return {
+      currentPanel: "",
       sketch: null,
       p5instance: null,
       canvas: null,
@@ -75,11 +107,18 @@ export default {
       this.p5instance.updateFormat();
     },
   },
-  components: {},
+  components: { Panel, PanelToggle },
   methods: {
     clickety: function () {
       this.p5instance.redraw();
       this.p5instance.saveImg();
+    },
+    openPanel: function (whichPanel) {
+      if (this.currentPanel == whichPanel) {
+        this.currentPanel = "";
+      } else {
+        this.currentPanel = whichPanel;
+      }
     },
   },
   mounted() {
@@ -301,7 +340,7 @@ export default {
 </script>
 
 <style lang="scss">
-$p: 3rem;
+@import "@/assets/css/_definitions.scss";
 
 body {
   margin: 0;
@@ -320,13 +359,17 @@ canvas {
   bottom: 0;
   width: $p;
   color: white;
-  padding: 0.25rem;
+
+  z-index: 2;
+
+  padding: 0.5rem;
 
   background: #333;
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.5rem;
+  @include toolbar_shadow;
 }
 
 #desktop {

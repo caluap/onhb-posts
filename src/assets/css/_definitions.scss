@@ -1,0 +1,32 @@
+$p: 4rem;
+
+$font-size-ratio: 1.25;
+$base-font-size: 16px;
+
+$panel_c: wheat;
+$selection: orangered;
+
+@mixin toolbar_shadow {
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
+}
+
+// @ https://css-tricks.com/snippets/sass/power-function/
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $value: $value / $number;
+    }
+  }
+
+  @return $value;
+}
+@mixin fs($s: 1, $linha: 1.5) {
+  font-size: $base-font-size * pow($font-size-ratio, $s);
+  line-height: $base-font-size * pow($font-size-ratio, $s) * $linha;
+}
