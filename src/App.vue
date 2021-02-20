@@ -391,6 +391,7 @@ body {
   &,
   * {
     font-family: "Inter", sans-serif !important;
+    @include fs(0);
   }
 }
 
@@ -434,16 +435,19 @@ canvas {
 
 .radio-container {
   label {
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.5);
     transition: all 0.5s ease;
-    padding: 0.5rem 0.75rem;
+    padding: 1rem;
 
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
 
     border-radius: 0.25rem;
     cursor: pointer;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.75);
+    }
   }
 
   input {
@@ -453,7 +457,7 @@ canvas {
     }
   }
   img {
-    height: 1rem;
+    height: 1.5rem;
   }
 }
 </style>
