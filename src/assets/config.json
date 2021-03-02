@@ -11,15 +11,15 @@
       "background": "#000000"
     },
     "ONHB12": {
-      "tintPattern": false,
+      "tintPattern": true,
       "background": "#000000"
     },
     "Pré-2020": {
-      "tintPattern": true,
+      "tintPattern": false,
       "background": "#cb0072"
     },
     "Neutro": {
-      "tintPattern": true,
+      "tintPattern": false,
       "background": "#000000"
     }
   }
