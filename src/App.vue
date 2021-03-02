@@ -43,11 +43,13 @@
       :class="{ 'visible-panel': currentPanel == 'format-picker' }"
       title="Seleção de formato"
     >
+      {{ format }}
       <nice-radio
         img-src="img/instagram-brands.svg"
         img-alt="Small camera icon (Instagram)"
         radio-name="social_media_format"
         radio-value="instagram_feed"
+        :checked="format == 'instagram_feed'"
         label="Feed"
         @change="changeFormat"
       />
@@ -56,6 +58,7 @@
         img-alt="Small camera icon (Instagram)"
         radio-name="social_media_format"
         radio-value="instagram_stories"
+        :checked="format == 'instagram_stories'"
         label="Stories"
         @change="changeFormat"
       />
@@ -64,6 +67,7 @@
         img-alt="The banner of an evil empire (Facebook)"
         radio-name="social_media_format"
         radio-value="facebook_feed"
+        :checked="format == 'facebook_feed'"
         label="Facebook"
         @change="changeFormat"
       />
@@ -72,6 +76,7 @@
         img-alt="A small bird (Twitter)"
         radio-name="social_media_format"
         radio-value="twitter_feed"
+        :checked="format == 'twitter_feed'"
         label="Twitter"
         @change="changeFormat"
       />
@@ -226,6 +231,34 @@
       :class="{ 'visible-panel': currentPanel == 'edition' }"
       title="Edições da ONHB"
     >
+      <nice-radio
+        radio-name="onhb_edition"
+        radio-value="ONHB13"
+        label="ONHB13"
+        :checked="edition == 'ONHB13'"
+        @change="changeEdition"
+      />
+      <nice-radio
+        radio-name="onhb_edition"
+        radio-value="ONHB12"
+        label="ONHB12"
+        :checked="edition == 'ONHB12'"
+        @change="changeEdition"
+      />
+      <nice-radio
+        radio-name="onhb_edition"
+        radio-value="Pré-2020"
+        label="Pré-2020"
+        :checked="edition == 'Pré-2020'"
+        @change="changeEdition"
+      />
+      <nice-radio
+        radio-name="onhb_edition"
+        radio-value="Neutro"
+        label="Neutro"
+        :checked="edition == 'Neutro'"
+        @change="changeEdition"
+      />
     </panel>
   </div>
 </template>
@@ -297,6 +330,9 @@ export default {
     format: function () {
       this.p5instance.updateFormat();
     },
+    edition: function () {
+      this.p5instance.redraw();
+    },
     textAlignment: function () {
       this.p5instance.redraw();
     },
@@ -331,6 +367,9 @@ export default {
       if (force == true || (force == false && this.p5instance.hasImg())) {
         this.p5instance.redraw();
       }
+    },
+    changeEdition: function (newEdition) {
+      this.edition = newEdition;
     },
     changeFormat: function (newFormat) {
       this.format = newFormat;

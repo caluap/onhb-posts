@@ -1,36 +1,39 @@
 <template>
   <div>
-    <input
-      type="radio"
-      :id="id"
-      v-model="radioButtonValue"
-      :value="radioValue"
-      :name="radioName"
-    />
-    <label :for="id"><img :src="imgSrc" :alt="imgAlt" /> {{ label }}</label>
+    <input type="radio" :id="id" @change="update" :name="radioName" />
+    <label :for="id" :class="{ checked }"
+      ><img v-if="imgSrc != ''" :src="imgSrc" :alt="imgAlt" />
+      {{ label }}</label
+    >
   </div>
 </template>
 
 <script>
 export default {
   name: "NiceRadio",
-  props: ["imgSrc", "imgAlt", "radioName", "radioValue", "model", "label"],
+  props: {
+    imgSrc: { type: String, default: "" },
+    imgAlt: {},
+    radioName: {},
+    radioValue: {},
+    model: {},
+    label: {},
+    checked: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       id: null,
     };
   },
-  computed: {
-    radioButtonValue: {
-      get: function () {
-        return this.radioValue;
-      },
-      set: function () {
-        // Communicate the change to parent component so that selectedValue can be updated
-        this.$emit("change", this.radioValue);
-      },
+  methods: {
+    update: function () {
+      this.$emit("change", this.radioValue);
     },
   },
+  computed: {},
   mounted() {
     this.id = this._uid;
   },
@@ -53,13 +56,13 @@ div {
     &:hover {
       background-color: rgba(255, 255, 255, 0.75);
     }
+    &.checked {
+      background-color: white;
+    }
   }
 
   input {
     display: none;
-    &:checked ~ label {
-      background-color: white;
-    }
   }
   img {
     height: 1.5rem;
