@@ -68,6 +68,10 @@
       :class="{ 'visible-panel': currentPanel == 'text' }"
       title="Caixas de texto"
     >
+      <label class="label-panel" for="main-text">Texto principal</label>
+      <textarea v-model="mainText" id="main-text" @keyup="update" />
+      <label class="label-panel" for="auxiliary-text">Texto auxiliar</label>
+      <textarea v-model="auxiliaryText" id="auxiliary-text" @keyup="update" />
     </panel>
     <panel
       v-show="currentPanel == 'image'"
@@ -113,6 +117,8 @@ export default {
       canvas: null,
       configRef: json,
       tint: 1.0,
+      mainText: "",
+      auxiliaryText: "",
       dirty: false,
       patterns: {
         circle: { name: "Circular", checked: false },
@@ -156,10 +162,12 @@ export default {
       this.format = newFormat;
     },
     openPanel: function (whichPanel = "") {
-      if (this.currentPanel == whichPanel) {
+      // will close a currently opened panel
+      if (this.currentPanel == whichPanel || whichPanel === "") {
         this.currentPanel = "";
         this.dirty = true;
       } else {
+        // is opening a currently closed panel space
         if (this.currentPanel == "") {
           this.dirty = true;
         }
@@ -359,20 +367,14 @@ export default {
 
         s.textSize(fsMainText);
         s.textLeading((fsMainText * 4) / 3);
-        s.text(
-          `data.text.mainText`,
-          margin,
-          yMainText,
-          w,
-          s.height - yMainText
-        );
+        s.text(this.mainText, margin, yMainText, w, s.height - yMainText);
 
         let yAuxText = 200;
         let fsAuxText = 20;
         s.textFont(auxFont);
         s.textSize(fsAuxText);
         s.textLeading((fsAuxText * 4) / 3);
-        s.text(`data.text.auxText`, margin, yAuxText, w, s.height - yAuxText);
+        s.text(this.auxiliaryText, margin, yAuxText, w, s.height - yAuxText);
       };
 
       s.draw = () => {
@@ -474,5 +476,17 @@ canvas {
   img {
     height: 1.5rem;
   }
+}
+
+.label-panel {
+  font-weight: bold;
+}
+* + .label-panel {
+  margin-top: 1rem;
+}
+
+textarea {
+  border: none;
+  min-height: 8rem;
 }
 </style>
