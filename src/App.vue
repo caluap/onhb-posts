@@ -26,67 +26,38 @@
       />
     </div>
     <panel v-show="currentPanel == 'format-picker'" title="Seleção de formato">
-      <div class="radio-container">
-        <input
-          type="radio"
-          id="format-instagram_feed"
-          value="instagram_feed"
-          v-model="format"
-          name="social_media_format"
-        />
-        <label for="format-instagram_feed"
-          ><img
-            src="img/instagram-brands.svg"
-            alt="Small camera icon (Instagram)"
-          />
-          Feed</label
-        >
-      </div>
-      <div class="radio-container">
-        <input
-          type="radio"
-          id="format-instagram_stories"
-          value="instagram_stories"
-          v-model="format"
-          name="social_media_format"
-        />
-        <label for="format-instagram_stories"
-          ><img
-            src="img/instagram-brands.svg"
-            alt="Small camera icon (Instagram)"
-          />
-          Stories</label
-        >
-      </div>
-      <div class="radio-container">
-        <input
-          type="radio"
-          id="format-facebook_feed"
-          value="facebook_feed"
-          v-model="format"
-          name="social_media_format"
-        />
-        <label for="format-facebook_feed"
-          ><img
-            src="img/facebook-brands.svg"
-            alt="The banner of an evil empire (Facebook)"
-          />
-          Facebook</label
-        >
-      </div>
-      <div class="radio-container">
-        <input
-          type="radio"
-          id="format-twitter_feed"
-          value="twitter_feed"
-          v-model="format"
-          name="social_media_format"
-        />
-        <label for="format-twitter_feed"
-          ><img src="img/twitter-brands.svg" alt="A small bird (Twitter)" />
-          Feed</label
-        >
-      </div>
+      <nice-radio
+        img-src="img/instagram-brands.svg"
+        img-alt="Small camera icon (Instagram)"
+        radio-name="social_media_format"
+        radio-value="instagram_feed"
+        label="Feed"
+        @change="changeFormat"
+      />
+      <nice-radio
+        img-src="img/instagram-brands.svg"
+        img-alt="Small camera icon (Instagram)"
+        radio-name="social_media_format"
+        radio-value="instagram_stories"
+        label="Stories"
+        @change="changeFormat"
+      />
+      <nice-radio
+        img-src="img/facebook-brands.svg"
+        img-alt="The banner of an evil empire (Facebook)"
+        radio-name="social_media_format"
+        radio-value="facebook_feed"
+        label="Facebook"
+        @change="changeFormat"
+      />
+      <nice-radio
+        img-src="img/twitter-brands.svg"
+        img-alt="A small bird (Twitter)"
+        radio-name="social_media_format"
+        radio-value="twitter_feed"
+        label="Twitter"
+        @change="changeFormat"
+      />
     </panel>
     <panel v-show="currentPanel == 'text'" title="Caixas de texto" />
     <panel v-show="currentPanel == 'image'" title="Upload de imagem">
@@ -116,6 +87,7 @@ import P5 from "p5";
 import json from "@/assets/config.json";
 import Panel from "./components/Panel";
 import PanelToggle from "./components/PanelToggle.vue";
+import NiceRadio from "./components/NiceRadio.vue";
 
 export default {
   name: "App",
@@ -150,11 +122,14 @@ export default {
       this.p5instance.updateFormat();
     },
   },
-  components: { Panel, PanelToggle },
+  components: { Panel, PanelToggle, NiceRadio },
   methods: {
     clickety: function () {
       this.p5instance.redraw();
       this.p5instance.saveImg();
+    },
+    changeFormat: function (newFormat) {
+      this.format = newFormat;
     },
     openPanel: function (whichPanel = "") {
       if (this.currentPanel == whichPanel) {
