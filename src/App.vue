@@ -188,6 +188,7 @@
     </panel>
     <panel
       v-show="currentPanel == 'pattern-picker'"
+      class="pattern-picker"
       :class="{ 'visible-panel': currentPanel == 'pattern-picker' }"
       title="Escolha de padrão gráfico tematizado"
       ><template v-for="(pattern, key) in patterns">
@@ -199,7 +200,10 @@
           @change="p5instance.draw()"
         />
         <label :key="`pattern-label-${key}`" :for="`pattern-${key}`"
-          >{{ pattern.name }}
+          ><img
+            :src="pattern.img"
+            :alt="`Icon para o padrão ${pattern.name}`"
+          />{{ pattern.name }}
         </label>
       </template>
     </panel>
@@ -232,11 +236,31 @@ export default {
       auxiliaryTextFontSize: 0.2,
       dirty: false,
       patterns: {
-        circle: { name: "Circular", checked: false },
-        border: { name: "Borda", checked: false },
-        full: { name: "Pleno", checked: false },
-        one_third: { name: "⅓", checked: false },
-        two_thirds: { name: "⅔", checked: false },
+        circle: {
+          name: "Circular",
+          checked: false,
+          img: "img/icons/pattern-icons/ico01.svg",
+        },
+        border: {
+          name: "Borda",
+          checked: false,
+          img: "img/icons/pattern-icons/ico02.svg",
+        },
+        full: {
+          name: "Pleno",
+          checked: false,
+          img: "img/icons/pattern-icons/ico03.svg",
+        },
+        one_third: {
+          name: "⅓",
+          checked: false,
+          img: "img/icons/pattern-icons/ico04.svg",
+        },
+        two_thirds: {
+          name: "⅔",
+          checked: false,
+          img: "img/icons/pattern-icons/ico05.svg",
+        },
       },
       format: "facebook_feed",
       formats: {
@@ -681,5 +705,34 @@ canvas {
 textarea {
   border: none;
   min-height: 8rem;
+}
+
+.pattern-picker {
+  img {
+    height: 2.5rem;
+  }
+  input {
+    display: none;
+    &:checked + label {
+      background-color: white;
+      border-color: rgba(0, 0, 0, 0.333);
+    }
+  }
+  label {
+    border: 1px solid transparent;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: all 0.5s ease;
+    padding: 0.5rem;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.75);
+      border-color: white;
+    }
+  }
 }
 </style>
