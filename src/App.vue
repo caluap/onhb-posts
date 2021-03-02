@@ -68,6 +68,47 @@
       :class="{ 'visible-panel': currentPanel == 'text' }"
       title="Caixas de texto"
     >
+      <div class="text-alignment-picker">
+        <h3 class="label-panel">Alinhamento do texto</h3>
+        <input
+          type="radio"
+          name="text-alignment"
+          id="left-alignment"
+          v-model="textAlignment"
+          value="LEFT"
+          checked
+        />
+        <label for="left-alignment"
+          ><img
+            src="img/icons/align-left.svg"
+            alt="Alinhamento de texto à esquerda."
+        /></label>
+        <input
+          type="radio"
+          name="text-alignment"
+          id="center-alignment"
+          v-model="textAlignment"
+          value="CENTER"
+        />
+        <label for="center-alignment"
+          ><img
+            src="img/icons/align-center.svg"
+            alt="Alinhamento centralizado de texto."
+        /></label>
+        <input
+          type="radio"
+          name="text-alignment"
+          id="right-alignment"
+          v-model="textAlignment"
+          value="RIGHT"
+        />
+        <label for="right-alignment"
+          ><img
+            src="img/icons/align-right.svg"
+            alt="Alinhamento de texto à direita."
+        /></label>
+      </div>
+
       <label class="label-panel" for="main-text">Texto principal</label>
       <textarea v-model="mainText" id="main-text" @keyup="update" />
       <label class="label-panel" for="auxiliary-text">Texto auxiliar</label>
@@ -114,6 +155,7 @@ export default {
       currentPanel: "",
       sketch: null,
       p5instance: null,
+      textAlignment: "LEFT",
       canvas: null,
       configRef: json,
       tint: 1.0,
@@ -141,6 +183,9 @@ export default {
   watch: {
     format: function () {
       this.p5instance.updateFormat();
+    },
+    textAlignment: function () {
+      this.p5instance.redraw();
     },
   },
   components: { Panel, PanelToggle, NiceRadio },
@@ -358,23 +403,36 @@ export default {
 
       s.drawText = () => {
         s.textFont(mainFont);
-        s.textAlign(s.LEFT, s.TOP);
-        s.fill(255);
 
         let w = (s.width * 2) / 3 - margin;
         let yMainText = 60; //sliderYMainText.value();
         let fsMainText = 40; //sliderFsMainText.value();
 
+        let alignment, x;
+        if (this.textAlignment == "LEFT") {
+          alignment = s.LEFT;
+          x = margin;
+        } else if (this.textAlignment == "CENTER") {
+          alignment = s.CENTER;
+          x = margin;
+          w = s.width - 2 * margin;
+        } else {
+          alignment = s.RIGHT;
+          x = s.width - w - margin;
+        }
+        s.textAlign(alignment, s.TOP);
+        s.fill(255);
+
         s.textSize(fsMainText);
         s.textLeading((fsMainText * 4) / 3);
-        s.text(this.mainText, margin, yMainText, w, s.height - yMainText);
+        s.text(this.mainText, x, yMainText, w, s.height - yMainText);
 
         let yAuxText = 200;
         let fsAuxText = 20;
         s.textFont(auxFont);
         s.textSize(fsAuxText);
         s.textLeading((fsAuxText * 4) / 3);
-        s.text(this.auxiliaryText, margin, yAuxText, w, s.height - yAuxText);
+        s.text(this.auxiliaryText, x, yAuxText, w, s.height - yAuxText);
       };
 
       s.draw = () => {
@@ -472,6 +530,35 @@ canvas {
     &:checked ~ label {
       background-color: white;
     }
+  }
+  img {
+    height: 1.5rem;
+  }
+}
+
+.text-alignment-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.5rem;
+  h3 {
+    grid-column: 1 / span 3;
+  }
+  input {
+    display: none;
+  }
+  label {
+    padding: 0.5rem 0.25rem;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: all 0.5s ease;
+    border-radius: 0.25rem;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+  }
+  input:checked + label {
+    background-color: white;
   }
   img {
     height: 1.5rem;
