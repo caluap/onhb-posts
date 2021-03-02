@@ -39,14 +39,17 @@ section {
   @include toolbar_shadow;
   background: $panel_c;
 
-  padding: 1rem;
-  padding-right: $p/2 + 1rem;
+  padding-right: $p/2;
 }
 
 .slot {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding: 1rem;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .title {

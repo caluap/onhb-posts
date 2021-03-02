@@ -109,10 +109,64 @@
         /></label>
       </div>
 
+      <hr class="divider" />
+
       <label class="label-panel" for="main-text">Texto principal</label>
       <textarea v-model="mainText" id="main-text" @keyup="update" />
+      <div class="range-container">
+        <label class="label-panel minor-label" for="main-text-y">Posição</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.001"
+          id="main-text-y"
+          v-model="mainTextY"
+        />
+      </div>
+      <div class="range-container">
+        <label class="label-panel minor-label" for="main-text-font-size"
+          >Tamanho</label
+        >
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.001"
+          id="main-text-font-size"
+          v-model="mainTextFontSize"
+        />
+      </div>
+
+      <hr class="divider" />
       <label class="label-panel" for="auxiliary-text">Texto auxiliar</label>
       <textarea v-model="auxiliaryText" id="auxiliary-text" @keyup="update" />
+      <div class="range-container">
+        <label class="label-panel minor-label" for="auxiliary-text-y"
+          >Posição</label
+        >
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.001"
+          id="auxiliary-text-y"
+          v-model="auxiliaryTextY"
+        />
+      </div>
+      <div class="range-container">
+        <label class="label-panel minor-label" for="auxiliary-text-font-size"
+          >Posição</label
+        >
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.001"
+          id="auxiliary-text-font-size"
+          v-model="auxiliaryTextFontSize"
+        />
+      </div>
     </panel>
     <panel
       v-show="currentPanel == 'image'"
@@ -160,7 +214,11 @@ export default {
       configRef: json,
       tint: 1.0,
       mainText: "",
+      mainTextY: 0.1,
+      mainTextFontSize: 0.2,
       auxiliaryText: "",
+      auxiliaryTextY: 0.5,
+      auxiliaryTextFontSize: 0.2,
       dirty: false,
       patterns: {
         circle: { name: "Circular", checked: false },
@@ -185,6 +243,18 @@ export default {
       this.p5instance.updateFormat();
     },
     textAlignment: function () {
+      this.p5instance.redraw();
+    },
+    mainTextY: function () {
+      this.p5instance.redraw();
+    },
+    mainTextFontSize: function () {
+      this.p5instance.redraw();
+    },
+    auxiliaryTextY: function () {
+      this.p5instance.redraw();
+    },
+    auxiliaryTextFontSize: function () {
       this.p5instance.redraw();
     },
   },
@@ -405,8 +475,8 @@ export default {
         s.textFont(mainFont);
 
         let w = (s.width * 2) / 3 - margin;
-        let yMainText = 60; //sliderYMainText.value();
-        let fsMainText = 40; //sliderFsMainText.value();
+        let yMainText = (s.height - 2 * margin) * this.mainTextY + margin;
+        let fsMainText = 20 + 180 * this.mainTextFontSize; //sliderFsMainText.value();
 
         let alignment, x;
         if (this.textAlignment == "LEFT") {
@@ -427,8 +497,8 @@ export default {
         s.textLeading((fsMainText * 4) / 3);
         s.text(this.mainText, x, yMainText, w, s.height - yMainText);
 
-        let yAuxText = 200;
-        let fsAuxText = 20;
+        let yAuxText = (s.height - 2 * margin) * this.auxiliaryTextY + margin;
+        let fsAuxText = 10 + 90 * this.auxiliaryTextFontSize;
         s.textFont(auxFont);
         s.textSize(fsAuxText);
         s.textLeading((fsAuxText * 4) / 3);
@@ -565,11 +635,27 @@ canvas {
   }
 }
 
+.range-container {
+  display: flex;
+  flex-direction: column;
+  input {
+    width: 100%;
+  }
+}
+
 .label-panel {
   font-weight: bold;
+  &.minor-label {
+    font-weight: normal;
+    @include fs(-1);
+  }
 }
-* + .label-panel {
-  margin-top: 1rem;
+
+.divider {
+  border: none;
+  display: block;
+  width: 100%;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.125);
 }
 
 textarea {
