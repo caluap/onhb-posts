@@ -112,7 +112,12 @@
       <hr class="divider" />
 
       <label class="label-panel" for="main-text">Texto principal</label>
-      <textarea v-model="mainText" id="main-text" @keyup="update" />
+      <textarea
+        v-model="mainText"
+        id="main-text"
+        @keyup="update(false)"
+        @blur="update(true)"
+      />
       <div class="range-container">
         <label class="label-panel minor-label" for="main-text-y">Posição</label>
         <input
@@ -140,7 +145,12 @@
 
       <hr class="divider" />
       <label class="label-panel" for="auxiliary-text">Texto auxiliar</label>
-      <textarea v-model="auxiliaryText" id="auxiliary-text" @keyup="update" />
+      <textarea
+        v-model="auxiliaryText"
+        id="auxiliary-text"
+        @keyup="update(false)"
+        @blur="update(true)"
+      />
       <div class="range-container">
         <label class="label-panel minor-label" for="auxiliary-text-y"
           >Posição</label
@@ -174,6 +184,7 @@
       title="Upload de imagem"
     >
       <div id="img-input-container"></div>
+      <button @click="removeImage">Remover imagem</button>
     </panel>
     <panel
       v-show="currentPanel == 'pattern-picker'"
@@ -270,8 +281,13 @@ export default {
       this.p5instance.redraw();
       this.p5instance.saveImg();
     },
-    update: function () {
-      this.p5instance.redraw();
+    removeImage: function () {
+      this.p5instance.removeImage();
+    },
+    update: function (force = true) {
+      if (force == true || (force == false && this.p5instance.hasImg())) {
+        this.p5instance.redraw();
+      }
     },
     changeFormat: function (newFormat) {
       this.format = newFormat;
@@ -300,6 +316,10 @@ export default {
         originalUserImg = null,
         loadedPatterns = {},
         margin = 40;
+
+      s.hasImg = () => {
+        return userImg === null;
+      };
 
       s.preload = () => {
         mainFont = s.loadFont("./fonts/CooperHewitt-Semibold.otf");
