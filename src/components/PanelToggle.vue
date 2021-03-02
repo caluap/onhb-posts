@@ -25,8 +25,9 @@ button {
   background-color: white;
   border-radius: 0.25rem;
   aspect-ratio: 1 / 1;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   user-select: none;
   &:hover {

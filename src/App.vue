@@ -4,26 +4,39 @@
       <div id="canvas-container"></div>
     </div>
     <div id="toolbar">
-      <panel-toggle
-        icon-src="./img/icons/format-picker.svg"
-        :selected="currentPanel == 'format-picker'"
-        @click.native="openPanel('format-picker')"
-      />
-      <panel-toggle
-        icon-src="./img/icons/text.svg"
-        :selected="currentPanel == 'text'"
-        @click.native="openPanel('text')"
-      />
-      <panel-toggle
-        icon-src="./img/icons/image.svg"
-        :selected="currentPanel == 'image'"
-        @click.native="openPanel('image')"
-      />
-      <panel-toggle
-        icon-src="./img/icons/pattern-picker.svg"
-        :selected="currentPanel == 'pattern-picker'"
-        @click.native="openPanel('pattern-picker')"
-      />
+      <div id="main-controls">
+        <panel-toggle
+          icon-src="./img/icons/format-picker.svg"
+          :selected="currentPanel == 'format-picker'"
+          @click.native="openPanel('format-picker')"
+        />
+        <panel-toggle
+          icon-src="./img/icons/text.svg"
+          :selected="currentPanel == 'text'"
+          @click.native="openPanel('text')"
+        />
+        <panel-toggle
+          icon-src="./img/icons/image.svg"
+          :selected="currentPanel == 'image'"
+          @click.native="openPanel('image')"
+        />
+        <panel-toggle
+          icon-src="./img/icons/pattern-picker.svg"
+          :selected="currentPanel == 'pattern-picker'"
+          @click.native="openPanel('pattern-picker')"
+        />
+        <panel-toggle
+          icon-src="./img/icons/calendar.svg"
+          :selected="currentPanel == 'edition'"
+          @click.native="openPanel('edition')"
+        />
+      </div>
+      <div id="aux-controls">
+        <panel-toggle
+          icon-src="./img/file-download-solid.svg"
+          @click.native="exportCanvas"
+        />
+      </div>
     </div>
     <panel
       v-show="currentPanel == 'format-picker'"
@@ -207,6 +220,13 @@
         </label>
       </template>
     </panel>
+
+    <panel
+      v-show="currentPanel == 'edition'"
+      :class="{ 'visible-panel': currentPanel == 'edition' }"
+      title="Edições da ONHB"
+    >
+    </panel>
   </div>
 </template>
 
@@ -301,8 +321,7 @@ export default {
     }
   },
   methods: {
-    clickety: function () {
-      this.p5instance.redraw();
+    exportCanvas: function () {
       this.p5instance.saveImg();
     },
     removeImage: function () {
@@ -590,7 +609,6 @@ canvas {
 
 #toolbar {
   position: fixed;
-  z-index: 1;
 
   left: 0;
   top: 0;
@@ -603,11 +621,22 @@ canvas {
   padding: 0.5rem;
 
   background: #333;
+  display: grid;
+  grid-template-rows: min-content auto min-content;
 
+  @include toolbar_shadow;
+}
+
+#main-controls {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  @include toolbar_shadow;
+  grid-row: 1;
+}
+#aux-controls {
+  display: flex;
+  flex-direction: column;
+  grid-row: 3;
 }
 
 #desktop {
