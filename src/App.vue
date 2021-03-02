@@ -25,7 +25,11 @@
         @click.native="openPanel('pattern-picker')"
       />
     </div>
-    <panel v-show="currentPanel == 'format-picker'" title="Seleção de formato">
+    <panel
+      v-show="currentPanel == 'format-picker'"
+      :class="{ 'visible-panel': currentPanel == 'format-picker' }"
+      title="Seleção de formato"
+    >
       <nice-radio
         img-src="img/instagram-brands.svg"
         img-alt="Small camera icon (Instagram)"
@@ -59,12 +63,22 @@
         @change="changeFormat"
       />
     </panel>
-    <panel v-show="currentPanel == 'text'" title="Caixas de texto" />
-    <panel v-show="currentPanel == 'image'" title="Upload de imagem">
+    <panel
+      v-show="currentPanel == 'text'"
+      :class="{ 'visible-panel': currentPanel == 'text' }"
+      title="Caixas de texto"
+    >
+    </panel>
+    <panel
+      v-show="currentPanel == 'image'"
+      :class="{ 'visible-panel': currentPanel == 'image' }"
+      title="Upload de imagem"
+    >
       <div id="img-input-container"></div>
     </panel>
     <panel
       v-show="currentPanel == 'pattern-picker'"
+      :class="{ 'visible-panel': currentPanel == 'pattern-picker' }"
       title="Escolha de padrão gráfico tematizado"
       ><template v-for="(pattern, key) in patterns">
         <input
@@ -99,6 +113,7 @@ export default {
       canvas: null,
       configRef: json,
       tint: 1.0,
+      dirty: false,
       patterns: {
         circle: { name: "Circular", checked: false },
         border: { name: "Borda", checked: false },
@@ -123,10 +138,19 @@ export default {
     },
   },
   components: { Panel, PanelToggle, NiceRadio },
+  updated: function () {
+    if (this.dirty) {
+      this.dirty = false;
+      this.p5instance.updateZoom();
+    }
+  },
   methods: {
     clickety: function () {
       this.p5instance.redraw();
       this.p5instance.saveImg();
+    },
+    update: function () {
+      this.p5instance.redraw();
     },
     changeFormat: function (newFormat) {
       this.format = newFormat;
@@ -134,7 +158,11 @@ export default {
     openPanel: function (whichPanel = "") {
       if (this.currentPanel == whichPanel) {
         this.currentPanel = "";
+        this.dirty = true;
       } else {
+        if (this.currentPanel == "") {
+          this.dirty = true;
+        }
         this.currentPanel = whichPanel;
       }
     },
@@ -176,8 +204,20 @@ export default {
       s.updateZoom = () => {
         // debugger; // eslint-disable-line no-debugger
         let availableHSpace = document.getElementById("desktop").clientHeight,
-          ratioH = availableHSpace / this.configRef.formats[this.format].h,
-          availableWSpace = document.getElementById("desktop").clientWidth,
+          availableWSpace = document.getElementById("desktop").clientWidth;
+
+        let el = document.getElementsByClassName("visible-panel");
+        if (el.length > 0) {
+          let w = el[0].clientWidth;
+          availableWSpace -= w;
+          document.getElementById(
+            "canvas-container"
+          ).style.paddingLeft = `${w}px`;
+        } else {
+          document.getElementById("canvas-container").style.paddingLeft = `0`;
+        }
+
+        let ratioH = availableHSpace / this.configRef.formats[this.format].h,
           ratioW = availableWSpace / this.configRef.formats[this.format].w;
 
         if (ratioW < 1 || ratioH < 1) {

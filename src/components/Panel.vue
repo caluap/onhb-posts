@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="panel">
     <div class="title">
       <h2 v-if="title != ''">{{ title }}</h2>
     </div>
