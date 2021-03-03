@@ -45,7 +45,7 @@
     >
       <nice-radio
         img-src="img/instagram-brands.svg"
-        img-alt="Small camera icon (Instagram)"
+        img-alt="Ícone representando uma pequena câmera (Instagram)"
         radio-name="social_media_format"
         radio-value="instagram_feed"
         :checked="format == 'instagram_feed'"
@@ -54,7 +54,7 @@
       />
       <nice-radio
         img-src="img/instagram-brands.svg"
-        img-alt="Small camera icon (Instagram)"
+        img-alt="Ícone representando uma pequena câmera (Instagram)"
         radio-name="social_media_format"
         radio-value="instagram_stories"
         :checked="format == 'instagram_stories'"
@@ -63,7 +63,7 @@
       />
       <nice-radio
         img-src="img/facebook-brands.svg"
-        img-alt="The banner of an evil empire (Facebook)"
+        img-alt="A efígie do império do mal (Facebook)"
         radio-name="social_media_format"
         radio-value="facebook_feed"
         :checked="format == 'facebook_feed'"
@@ -72,7 +72,7 @@
       />
       <nice-radio
         img-src="img/twitter-brands.svg"
-        img-alt="A small bird (Twitter)"
+        img-alt="Ícone de um pequeno pássaro (Twitter)"
         radio-name="social_media_format"
         radio-value="twitter_feed"
         :checked="format == 'twitter_feed'"
