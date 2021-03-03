@@ -43,7 +43,6 @@
       :class="{ 'visible-panel': currentPanel == 'format-picker' }"
       title="Seleção de formato"
     >
-      {{ format }}
       <nice-radio
         img-src="img/instagram-brands.svg"
         img-alt="Small camera icon (Instagram)"
@@ -209,21 +208,61 @@
       class="pattern-picker"
       :class="{ 'visible-panel': currentPanel == 'pattern-picker' }"
       title="Escolha de padrão gráfico tematizado"
-      ><template v-for="(pattern, key) in patterns">
-        <input
-          type="checkbox"
-          :id="`pattern-${key}`"
-          v-model="pattern.checked"
-          :key="`pattern-${key}`"
-          @change="p5instance.draw()"
-        />
-        <label :key="`pattern-label-${key}`" :for="`pattern-${key}`"
-          ><img
-            :src="pattern.img"
-            :alt="`Icon para o padrão ${pattern.name}`"
-          />{{ pattern.name }}
-        </label>
-      </template>
+    >
+      <nice-radio
+        img-src="img/icons/pattern-icons/ico00.svg"
+        img-alt="Ícone representando nenhum padrão"
+        radio-name="pattern_selection"
+        radio-value="none"
+        label="Nenhum"
+        :checked="pattern == 'none'"
+        @change="changePattern"
+      />
+      <nice-radio
+        img-src="img/icons/pattern-icons/ico01.svg"
+        img-alt="Ícone representando padrão circular"
+        radio-name="pattern_selection"
+        radio-value="circle"
+        label="Circular"
+        :checked="pattern == 'circle'"
+        @change="changePattern"
+      />
+      <nice-radio
+        img-src="img/icons/pattern-icons/ico02.svg"
+        img-alt="Ícone representando padrão em formato de borda"
+        radio-name="pattern_selection"
+        radio-value="border"
+        label="Borda"
+        :checked="pattern == 'border'"
+        @change="changePattern"
+      />
+      <nice-radio
+        img-src="img/icons/pattern-icons/ico03.svg"
+        img-alt="Ícone representando padrão de preenchimento pleno"
+        radio-name="pattern_selection"
+        radio-value="full"
+        label="Pleno"
+        :checked="pattern == 'full'"
+        @change="changePattern"
+      />
+      <nice-radio
+        img-src="img/icons/pattern-icons/ico04.svg"
+        img-alt="Ícone representando padrão um terço"
+        radio-name="pattern_selection"
+        radio-value="one_third"
+        label="⅓"
+        :checked="pattern == 'one_third'"
+        @change="changePattern"
+      />
+      <nice-radio
+        img-src="img/icons/pattern-icons/ico05.svg"
+        img-alt="Ícone representando padrão dois terços"
+        radio-name="pattern_selection"
+        radio-value="two_thirds"
+        label="⅔"
+        :checked="pattern == 'two_thirds'"
+        @change="changePattern"
+      />
     </panel>
 
     <panel
@@ -288,33 +327,7 @@ export default {
       auxiliaryTextY: 0.5,
       auxiliaryTextFontSize: 0.2,
       dirty: false,
-      patterns: {
-        circle: {
-          name: "Circular",
-          checked: false,
-          img: "img/icons/pattern-icons/ico01.svg",
-        },
-        border: {
-          name: "Borda",
-          checked: false,
-          img: "img/icons/pattern-icons/ico02.svg",
-        },
-        full: {
-          name: "Pleno",
-          checked: false,
-          img: "img/icons/pattern-icons/ico03.svg",
-        },
-        one_third: {
-          name: "⅓",
-          checked: false,
-          img: "img/icons/pattern-icons/ico04.svg",
-        },
-        two_thirds: {
-          name: "⅔",
-          checked: false,
-          img: "img/icons/pattern-icons/ico05.svg",
-        },
-      },
+      pattern: "none",
       format: "facebook_feed",
       formats: {
         facebook_feed: "Facebook",
@@ -331,6 +344,9 @@ export default {
       this.p5instance.updateFormat();
     },
     edition: function () {
+      this.p5instance.redraw();
+    },
+    pattern: function () {
       this.p5instance.redraw();
     },
     textAlignment: function () {
@@ -373,6 +389,9 @@ export default {
     },
     changeFormat: function (newFormat) {
       this.format = newFormat;
+    },
+    changePattern: function (newPattern) {
+      this.pattern = newPattern;
     },
     openPanel: function (whichPanel = "") {
       // will close a currently opened panel
@@ -521,47 +540,44 @@ export default {
       };
 
       s.drawPattern = () => {
-        for (const [key, value] of Object.entries(this.patterns)) {
-          if (value.checked) {
-            // first time for a given edition
-            if (!(this.edition in loadedPatterns)) {
-              loadedPatterns[this.edition] = {};
-            }
+        if (this.pattern != "none") {
+          // first time for a given edition
+          if (!(this.edition in loadedPatterns)) {
+            loadedPatterns[this.edition] = {};
+          }
 
-            // first time for a given social media format
-            if (!(this.format in loadedPatterns[this.edition])) {
-              loadedPatterns[this.edition][this.format] = {};
-            }
+          // first time for a given social media format
+          if (!(this.format in loadedPatterns[this.edition])) {
+            loadedPatterns[this.edition][this.format] = {};
+          }
 
-            // has this particular pattern been loaded?
-            if (!(key in loadedPatterns[this.edition][this.format])) {
-              let path = `./img/patterns/${this.edition}/${this.format}/${key}.png`;
-              loadedPatterns[this.edition][this.format][key] = s.loadImage(
-                path,
-                () => {
-                  console.log(
-                    `Loaded the pattern for ${this.edition} / ${this.format} / ${key}`
-                  );
-                  s.updateCanvas();
-                }
+          // has this particular pattern been loaded?
+          if (!(this.pattern in loadedPatterns[this.edition][this.format])) {
+            let path = `./img/patterns/${this.edition}/${this.format}/${this.pattern}.png`;
+            loadedPatterns[this.edition][this.format][
+              this.pattern
+            ] = s.loadImage(path, () => {
+              console.log(
+                `Loaded the pattern for ${this.edition} / ${this.format} / ${this.pattern}`
               );
-            } else {
-              if (this.configRef.editions[this.edition].tintPattern) {
-                if (userImg) {
-                  s.tint("#ff008f");
-                } else {
-                  s.tint("#cb0072");
-                }
+              s.updateCanvas();
+            });
+          } else {
+            if (this.configRef.editions[this.edition].tintPattern) {
+              if (userImg) {
+                s.tint("#ff008f");
+              } else {
+                s.tint("#cb0072");
               }
-              s.image(
-                loadedPatterns[this.edition][this.format][key],
-                0,
-                0,
-                s.width,
-                s.height
-              );
-              s.noTint();
             }
+            s.image(
+              loadedPatterns[this.edition][this.format][this.pattern],
+              0,
+              0,
+              s.width,
+              s.height
+            );
+            s.noTint();
           }
         }
       };
@@ -777,30 +793,7 @@ textarea {
 
 .pattern-picker {
   img {
-    height: 2.5rem;
-  }
-  input {
-    display: none;
-    &:checked + label {
-      background-color: white;
-      border-color: rgba(0, 0, 0, 0.333);
-    }
-  }
-  label {
-    border: 1px solid transparent;
-    background-color: rgba(255, 255, 255, 0.5);
-    transition: all 0.5s ease;
-    padding: 0.5rem;
-
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    cursor: pointer;
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.75);
-      border-color: white;
-    }
+    height: 2.5rem !important;
   }
 }
 </style>
