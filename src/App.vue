@@ -592,9 +592,13 @@ export default {
       s.drawText = () => {
         s.textFont(mainFont);
 
-        let w = (s.width * 2) / 3 - margin;
+        let w = s.width - margin * 2;
         let yMainText = (s.height - 2 * margin) * this.mainTextY + margin;
-        let fsMainText = 20 + 180 * this.mainTextFontSize; //sliderFsMainText.value();
+        let fsMainText =
+          20 +
+          180 *
+            this.mainTextFontSize *
+            this.configRef.formats[this.format].font_adjust; //sliderFsMainText.value();
 
         let alignment, x;
         if (this.textAlignment == "LEFT") {
@@ -616,7 +620,11 @@ export default {
         s.text(this.mainText, x, yMainText, w, s.height - yMainText);
 
         let yAuxText = (s.height - 2 * margin) * this.auxiliaryTextY + margin;
-        let fsAuxText = 10 + 90 * this.auxiliaryTextFontSize;
+        let fsAuxText =
+          10 +
+          90 *
+            this.auxiliaryTextFontSize *
+            this.configRef.formats[this.format].font_adjust;
         s.textFont(auxFont);
         s.textSize(fsAuxText);
         s.textLeading((fsAuxText * 4) / 3);

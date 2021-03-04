@@ -1,9 +1,9 @@
 {
   "formats": {
-    "facebook_feed": { "w": 1200, "h": 630 },
-    "twitter_feed": { "w": 1024, "h": 512 },
-    "instagram_feed": { "w": 1080, "h": 1080 },
-    "instagram_stories": { "w": 1080, "h": 1920 }
+    "facebook_feed": { "w": 1200, "h": 630, "font_adjust": 1 },
+    "twitter_feed": { "w": 1024, "h": 512, "font_adjust": 0.8 },
+    "instagram_feed": { "w": 1080, "h": 1080, "font_adjust": 1 },
+    "instagram_stories": { "w": 1080, "h": 1920, "font_adjust": 1.6 }
   },
   "editions": {
     "ONHB13": {
