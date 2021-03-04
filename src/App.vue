@@ -201,6 +201,11 @@
       title="Upload de imagem"
     >
       <div id="img-input-container"></div>
+      <label for="tint-image"
+        ><input type="checkbox" id="tint-image" v-model="tintImage" /> Aplicar
+        cor</label
+      >
+
       <button @click="removeImage">Remover imagem</button>
     </panel>
     <panel
@@ -327,6 +332,7 @@ export default {
       auxiliaryTextY: 0.5,
       auxiliaryTextFontSize: 0.2,
       dirty: false,
+      tintImage: true,
       pattern: "none",
       format: "facebook_feed",
       formats: {
@@ -340,6 +346,9 @@ export default {
     };
   },
   watch: {
+    tintImage: function () {
+      this.p5instance.redraw();
+    },
     format: function () {
       this.p5instance.updateFormat();
     },
@@ -512,10 +521,14 @@ export default {
 
           s.image(userImg, x, y, newW, newH);
 
-          let alpha = 255 * (1 - this.tint);
-          s.tint(255, alpha);
-          s.image(originalUserImg, x, y, newW, newH);
+          if (this.tintImage) {
+            let alpha = 255 * (1 - this.tint);
+            s.tint(255, alpha);
+          } else {
+            s.noTint();
+          }
 
+          s.image(originalUserImg, x, y, newW, newH);
           s.noTint();
         }
       };
