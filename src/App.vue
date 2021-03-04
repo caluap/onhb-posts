@@ -183,7 +183,7 @@
       </div>
       <div class="range-container">
         <label class="label-panel minor-label" for="auxiliary-text-font-size"
-          >Posição</label
+          >Tamanho</label
         >
         <input
           type="range"
