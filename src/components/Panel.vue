@@ -72,5 +72,6 @@ h2 {
 
   font-weight: 500;
   @include fs(0);
+  line-height: 0;
 }
 </style>
