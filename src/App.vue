@@ -105,48 +105,50 @@
       :class="{ 'visible-panel': currentPanel == 'text' }"
       title="Caixas de texto"
     >
-      <div class="text-alignment-picker">
-        <h3 class="label-panel">Alinhamento do texto</h3>
-        <input
-          type="radio"
-          name="text-alignment"
-          id="left-alignment"
-          v-model="textAlignment"
-          value="LEFT"
-          checked
-        />
-        <label for="left-alignment"
-          ><img
-            src="img/icons/align-left.svg"
-            alt="Alinhamento de texto à esquerda."
-        /></label>
-        <input
-          type="radio"
-          name="text-alignment"
-          id="center-alignment"
-          v-model="textAlignment"
-          value="CENTER"
-        />
-        <label for="center-alignment"
-          ><img
-            src="img/icons/align-center.svg"
-            alt="Alinhamento centralizado de texto."
-        /></label>
-        <input
-          type="radio"
-          name="text-alignment"
-          id="right-alignment"
-          v-model="textAlignment"
-          value="RIGHT"
-        />
-        <label for="right-alignment"
-          ><img
-            src="img/icons/align-right.svg"
-            alt="Alinhamento de texto à direita."
-        /></label>
-      </div>
+      <template v-if="edition !== 'Depoimento'">
+        <div class="text-alignment-picker">
+          <h3 class="label-panel">Alinhamento do texto</h3>
+          <input
+            type="radio"
+            name="text-alignment"
+            id="left-alignment"
+            v-model="textAlignment"
+            value="LEFT"
+            checked
+          />
+          <label for="left-alignment"
+            ><img
+              src="img/icons/align-left.svg"
+              alt="Alinhamento de texto à esquerda."
+          /></label>
+          <input
+            type="radio"
+            name="text-alignment"
+            id="center-alignment"
+            v-model="textAlignment"
+            value="CENTER"
+          />
+          <label for="center-alignment"
+            ><img
+              src="img/icons/align-center.svg"
+              alt="Alinhamento centralizado de texto."
+          /></label>
+          <input
+            type="radio"
+            name="text-alignment"
+            id="right-alignment"
+            v-model="textAlignment"
+            value="RIGHT"
+          />
+          <label for="right-alignment"
+            ><img
+              src="img/icons/align-right.svg"
+              alt="Alinhamento de texto à direita."
+          /></label>
+        </div>
 
-      <hr class="divider" />
+        <hr class="divider" />
+      </template>
 
       <label class="label-panel" for="main-text">Texto principal</label>
       <textarea
@@ -155,17 +157,23 @@
         @keyup="update(false)"
         @blur="update(true)"
       />
-      <div class="range-container">
-        <label class="label-panel minor-label" for="main-text-y">Posição</label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.001"
-          id="main-text-y"
-          v-model="mainTextY"
-        />
-      </div>
+
+      <template v-if="edition !== 'Depoimento'">
+        <div class="range-container">
+          <label class="label-panel minor-label" for="main-text-y"
+            >Posição</label
+          >
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.001"
+            id="main-text-y"
+            v-model="mainTextY"
+          />
+        </div>
+      </template>
+
       <div class="range-container">
         <label class="label-panel minor-label" for="main-text-font-size"
           >Tamanho</label
@@ -181,39 +189,63 @@
       </div>
 
       <hr class="divider" />
-      <label class="label-panel" for="auxiliary-text">Texto auxiliar</label>
-      <textarea
-        v-model="auxiliaryText"
-        id="auxiliary-text"
-        @keyup="update(false)"
-        @blur="update(true)"
-      />
-      <div class="range-container">
-        <label class="label-panel minor-label" for="auxiliary-text-y"
-          >Posição</label
+
+      <template v-if="edition !== 'Depoimento'">
+        <label class="label-panel" for="auxiliary-text">Texto auxiliar</label>
+        <textarea
+          v-model="auxiliaryText"
+          id="auxiliary-text"
+          @keyup="update(false)"
+          @blur="update(true)"
+        />
+        <div class="range-container">
+          <label class="label-panel minor-label" for="auxiliary-text-y"
+            >Posição</label
+          >
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.001"
+            id="auxiliary-text-y"
+            v-model="auxiliaryTextY"
+          />
+        </div>
+        <div class="range-container">
+          <label class="label-panel minor-label" for="auxiliary-text-font-size"
+            >Tamanho</label
+          >
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.001"
+            id="auxiliary-text-font-size"
+            v-model="auxiliaryTextFontSize"
+          />
+        </div>
+      </template>
+
+      <template v-if="edition == 'Depoimento'">
+        <label class="label-panel" for="testimony-name">Nome do depoente</label>
+        <input
+          type="text"
+          v-model="testimonyName"
+          id="testimony-name"
+          @keyup="update(false)"
+          @blur="update(true)"
+        />
+        <label class="label-panel" for="testimony-origin"
+          >Origem do depoente</label
         >
         <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.001"
-          id="auxiliary-text-y"
-          v-model="auxiliaryTextY"
+          type="text"
+          v-model="testimonyOrigin"
+          id="testimony-origin"
+          @keyup="update(false)"
+          @blur="update(true)"
         />
-      </div>
-      <div class="range-container">
-        <label class="label-panel minor-label" for="auxiliary-text-font-size"
-          >Tamanho</label
-        >
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.001"
-          id="auxiliary-text-font-size"
-          v-model="auxiliaryTextFontSize"
-        />
-      </div>
+      </template>
     </panel>
     <panel
       v-show="currentPanel == 'image'"
@@ -371,6 +403,8 @@ export default {
       mainText: '',
       mainTextY: 0.1,
       mainTextFontSize: 0.2,
+      testimonyName: '',
+      testimonyOrigin: '',
       auxiliaryText: '',
       auxiliaryTextY: 0.5,
       auxiliaryTextFontSize: 0.2,
@@ -657,52 +691,98 @@ export default {
       };
 
       s.drawLogo = () => {
-        let logoSize = Math.max(s.width * 0.1, 90);
-        let x = s.width - margin - logoSize;
-        let y = s.height - margin - logoSize;
+        let x, y, logoSize;
+
+        logoSize = Math.max(s.width * 0.1, 90);
+        y = s.height - margin - logoSize;
+        if (this.edition == 'Depoimento') {
+          x = margin;
+        } else {
+          x = s.width - margin - logoSize;
+        }
         s.image(logo, x, y, logoSize, logoSize);
       };
 
       s.drawText = () => {
-        s.textFont(mainFont);
+        let w, yMainText, fsMainText, alignment, x, yAuxText, fsAuxText;
 
-        let w = s.width - margin * 2;
-        let yMainText = (s.height - 2 * margin) * this.mainTextY + margin;
-        let fsMainText =
+        s.textFont(mainFont);
+        fsMainText =
           20 +
           180 *
             this.mainTextFontSize *
-            this.configRef.formats[this.format].font_adjust; //sliderFsMainText.value();
-
-        let alignment, x;
-        if (this.textAlignment == 'LEFT') {
-          alignment = s.LEFT;
-          x = margin;
-        } else if (this.textAlignment == 'CENTER') {
-          alignment = s.CENTER;
-          x = margin;
-          w = s.width - 2 * margin;
-        } else {
-          alignment = s.RIGHT;
-          x = s.width - w - margin;
-        }
-        s.textAlign(alignment, s.TOP);
-        s.fill(255);
-
-        s.textSize(fsMainText);
-        s.textLeading((fsMainText * 4) / 3);
-        s.text(this.mainText, x, yMainText, w, s.height - yMainText);
-
-        let yAuxText = (s.height - 2 * margin) * this.auxiliaryTextY + margin;
-        let fsAuxText =
-          10 +
-          90 *
-            this.auxiliaryTextFontSize *
             this.configRef.formats[this.format].font_adjust;
-        s.textFont(auxFont);
-        s.textSize(fsAuxText);
-        s.textLeading((fsAuxText * 4) / 3);
-        s.text(this.auxiliaryText, x, yAuxText, w, s.height - yAuxText);
+
+        if (this.edition == 'Depoimento') {
+          let xT = 540;
+          yMainText = margin * 2;
+
+          s.textSize(fsMainText);
+          s.textLeading((fsMainText * 4) / 3);
+          s.textAlign(s.LEFT, s.TOP);
+          s.fill(255);
+
+          s.text(
+            this.mainText,
+            xT,
+            yMainText,
+            s.width - xT - margin * 2,
+            s.height - yMainText * 2
+          );
+
+          // Quote marks
+          s.textSize(240);
+          s.fill(47, 218, 190);
+          s.text('“', xT - 120, margin + 10);
+          s.text('”', s.width - 140, s.height - margin - 90);
+
+          // Name and origin
+          s.fill(255);
+          s.textAlign(s.CENTER, s.TOP);
+          s.textSize(38);
+          s.textLeading(50);
+
+          let dep = `${this.testimonyName} \n${this.testimonyOrigin}`;
+          let y = 450;
+          s.text(
+            dep,
+            margin,
+            y,
+            s.width - xT - margin * 3,
+            s.height - margin - y
+          );
+        } else {
+          w = s.width - margin * 2;
+          yMainText = (s.height - 2 * margin) * this.mainTextY + margin;
+
+          if (this.textAlignment == 'LEFT') {
+            alignment = s.LEFT;
+            x = margin;
+          } else if (this.textAlignment == 'CENTER') {
+            alignment = s.CENTER;
+            x = margin;
+            w = s.width - 2 * margin;
+          } else {
+            alignment = s.RIGHT;
+            x = s.width - w - margin;
+          }
+          s.textAlign(alignment, s.TOP);
+          s.textSize(fsMainText);
+          s.textLeading((fsAuxText * 4) / 3);
+          s.fill(255);
+          s.text(this.mainText, x, yMainText, w, s.height - yMainText);
+
+          yAuxText = (s.height - 2 * margin) * this.auxiliaryTextY + margin;
+          fsAuxText =
+            10 +
+            90 *
+              this.auxiliaryTextFontSize *
+              this.configRef.formats[this.format].font_adjust;
+          s.textFont(auxFont);
+          s.textSize(fsAuxText);
+          s.textLeading((fsAuxText * 4) / 3);
+          s.text(this.auxiliaryText, x, yAuxText, w, s.height - yAuxText);
+        }
       };
 
       s.draw = () => {
@@ -866,6 +946,10 @@ canvas {
   display: block;
   width: 100%;
   border-bottom: 2px solid rgba(0, 0, 0, 0.125);
+}
+
+input[type='text'] {
+  border: none;
 }
 
 textarea {
