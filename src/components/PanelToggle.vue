@@ -6,18 +6,18 @@
 
 <script>
 export default {
-  name: "PanelToggle",
+  name: 'PanelToggle',
   methods: {},
   props: {
     iconSrc: { type: String },
-    altText: { type: String, default: "" },
+    altText: { type: String, default: '' },
     selected: { type: Boolean, default: false },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/css/_definitions.scss";
+@import '@/assets/css/_definitions.scss';
 
 button {
   padding: 0.5rem;

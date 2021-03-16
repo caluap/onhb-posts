@@ -10,9 +10,9 @@
 
 <script>
 export default {
-  name: "NiceRadio",
+  name: 'NiceRadio',
   props: {
-    imgSrc: { type: String, default: "" },
+    imgSrc: { type: String, default: '' },
     imgAlt: {},
     radioName: {},
     radioValue: {},
@@ -29,8 +29,8 @@ export default {
     };
   },
   methods: {
-    update: function () {
-      this.$emit("change", this.radioValue);
+    update: function() {
+      this.$emit('change', this.radioValue);
     },
   },
   computed: {},

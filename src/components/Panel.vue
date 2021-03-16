@@ -11,11 +11,11 @@
 
 <script>
 export default {
-  name: "Panel",
+  name: 'Panel',
   props: {
     title: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
@@ -25,7 +25,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/css/_definitions.scss";
+@import '@/assets/css/_definitions.scss';
 
 section {
   position: fixed;

@@ -308,108 +308,108 @@
 </template>
 
 <script>
-import P5 from "p5";
-import json from "@/assets/config.json";
-import Panel from "./components/Panel";
-import PanelToggle from "./components/PanelToggle.vue";
-import NiceRadio from "./components/NiceRadio.vue";
+import P5 from 'p5';
+import json from '@/assets/config.json';
+import Panel from './components/Panel';
+import PanelToggle from './components/PanelToggle.vue';
+import NiceRadio from './components/NiceRadio.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
-      currentPanel: "",
+      currentPanel: '',
       sketch: null,
       p5instance: null,
-      textAlignment: "LEFT",
+      textAlignment: 'LEFT',
       canvas: null,
       configRef: json,
       tint: 1.0,
-      mainText: "",
+      mainText: '',
       mainTextY: 0.1,
       mainTextFontSize: 0.2,
-      auxiliaryText: "",
+      auxiliaryText: '',
       auxiliaryTextY: 0.5,
       auxiliaryTextFontSize: 0.2,
       dirty: false,
       tintImage: true,
-      pattern: "none",
-      format: "facebook_feed",
+      pattern: 'none',
+      format: 'facebook_feed',
       formats: {
-        facebook_feed: "Facebook",
-        twitter_feed: "Twitter",
-        instagram_feed: "Timeline Instagram",
-        instagram_stories: "Stories Instagram",
+        facebook_feed: 'Facebook',
+        twitter_feed: 'Twitter',
+        instagram_feed: 'Timeline Instagram',
+        instagram_stories: 'Stories Instagram',
       },
-      edition: "ONHB12",
-      editions: ["ONHB12", "Pré-2020", "Neutro"],
+      edition: 'ONHB12',
+      editions: ['ONHB12', 'Pré-2020', 'Neutro'],
     };
   },
   watch: {
-    tintImage: function () {
+    tintImage: function() {
       this.p5instance.redraw();
     },
-    format: function () {
+    format: function() {
       this.p5instance.updateFormat();
     },
-    edition: function () {
+    edition: function() {
       this.p5instance.redraw();
     },
-    pattern: function () {
+    pattern: function() {
       this.p5instance.redraw();
     },
-    textAlignment: function () {
+    textAlignment: function() {
       this.p5instance.redraw();
     },
-    mainTextY: function () {
+    mainTextY: function() {
       this.p5instance.redraw();
     },
-    mainTextFontSize: function () {
+    mainTextFontSize: function() {
       this.p5instance.redraw();
     },
-    auxiliaryTextY: function () {
+    auxiliaryTextY: function() {
       this.p5instance.redraw();
     },
-    auxiliaryTextFontSize: function () {
+    auxiliaryTextFontSize: function() {
       this.p5instance.redraw();
     },
   },
   components: { Panel, PanelToggle, NiceRadio },
-  updated: function () {
+  updated: function() {
     if (this.dirty) {
       this.dirty = false;
       this.p5instance.updateZoom();
     }
   },
   methods: {
-    exportCanvas: function () {
+    exportCanvas: function() {
       this.p5instance.saveImg();
     },
-    removeImage: function () {
+    removeImage: function() {
       this.p5instance.removeImage();
     },
-    update: function (force = true) {
+    update: function(force = true) {
       if (force == true || (force == false && this.p5instance.hasImg())) {
         this.p5instance.redraw();
       }
     },
-    changeEdition: function (newEdition) {
+    changeEdition: function(newEdition) {
       this.edition = newEdition;
     },
-    changeFormat: function (newFormat) {
+    changeFormat: function(newFormat) {
       this.format = newFormat;
     },
-    changePattern: function (newPattern) {
+    changePattern: function(newPattern) {
       this.pattern = newPattern;
     },
-    openPanel: function (whichPanel = "") {
+    openPanel: function(whichPanel = '') {
       // will close a currently opened panel
-      if (this.currentPanel == whichPanel || whichPanel === "") {
-        this.currentPanel = "";
+      if (this.currentPanel == whichPanel || whichPanel === '') {
+        this.currentPanel = '';
         this.dirty = true;
       } else {
         // is opening a currently closed panel space
-        if (this.currentPanel == "") {
+        if (this.currentPanel == '') {
           this.dirty = true;
         }
         this.currentPanel = whichPanel;
@@ -432,10 +432,10 @@ export default {
       };
 
       s.preload = () => {
-        mainFont = s.loadFont("./fonts/CooperHewitt-Semibold.otf");
-        auxFont = s.loadFont("./fonts/CooperHewitt-Book.otf");
-        auxFont2 = s.loadFont("./fonts/CooperHewitt-MediumItalic.otf");
-        logo = s.loadImage("./img/logo.png");
+        mainFont = s.loadFont('./fonts/CooperHewitt-Semibold.otf');
+        auxFont = s.loadFont('./fonts/CooperHewitt-Book.otf');
+        auxFont2 = s.loadFont('./fonts/CooperHewitt-MediumItalic.otf');
+        logo = s.loadImage('./img/logo.png');
       };
 
       s.setup = () => {
@@ -445,29 +445,29 @@ export default {
         );
 
         let imgInput = s.createFileInput(s.handleUpload);
-        imgInput.id("img-upload");
-        let container = s.select("#img-input-container");
+        imgInput.id('img-upload');
+        let container = s.select('#img-input-container');
         container.child(imgInput);
 
-        this.canvas.parent("canvas-container");
+        this.canvas.parent('canvas-container');
         s.updateZoom();
         console.log(`${mainFont}/${auxFont}/${auxFont2}`);
       };
 
       s.updateZoom = () => {
         // debugger; // eslint-disable-line no-debugger
-        let availableHSpace = document.getElementById("desktop").clientHeight,
-          availableWSpace = document.getElementById("desktop").clientWidth;
+        let availableHSpace = document.getElementById('desktop').clientHeight,
+          availableWSpace = document.getElementById('desktop').clientWidth;
 
-        let el = document.getElementsByClassName("visible-panel");
+        let el = document.getElementsByClassName('visible-panel');
         if (el.length > 0) {
           let w = el[0].clientWidth;
           availableWSpace -= w;
           document.getElementById(
-            "canvas-container"
+            'canvas-container'
           ).style.paddingLeft = `${w}px`;
         } else {
-          document.getElementById("canvas-container").style.paddingLeft = `0`;
+          document.getElementById('canvas-container').style.paddingLeft = `0`;
         }
 
         let ratioH = availableHSpace / this.configRef.formats[this.format].h,
@@ -496,10 +496,10 @@ export default {
 
       s.saveImg = () => {
         let now = new Date();
-        let clock = now.getHours() + "·" + now.getMinutes();
+        let clock = now.getHours() + '·' + now.getMinutes();
         let day = now.toJSON().slice(0, 10);
         let fn = `post-${day}-${clock}.jpg`;
-        s.saveCanvas(this.canvas, fn, "jpg");
+        s.saveCanvas(this.canvas, fn, 'jpg');
       };
 
       s.drawImages = () => {
@@ -534,7 +534,7 @@ export default {
       };
 
       s.handleUpload = (file) => {
-        if (file.type === "image") {
+        if (file.type === 'image') {
           userImg = s.loadImage(file.data, () => {
             originalUserImg = userImg.get();
             console.log(originalUserImg);
@@ -553,7 +553,7 @@ export default {
       };
 
       s.drawPattern = () => {
-        if (this.pattern != "none") {
+        if (this.pattern != 'none') {
           // first time for a given edition
           if (!(this.edition in loadedPatterns)) {
             loadedPatterns[this.edition] = {};
@@ -578,9 +578,9 @@ export default {
           } else {
             if (this.configRef.editions[this.edition].tintPattern) {
               if (userImg) {
-                s.tint("#ff008f");
+                s.tint('#ff008f');
               } else {
-                s.tint("#cb0072");
+                s.tint('#cb0072');
               }
             }
             s.image(
@@ -614,10 +614,10 @@ export default {
             this.configRef.formats[this.format].font_adjust; //sliderFsMainText.value();
 
         let alignment, x;
-        if (this.textAlignment == "LEFT") {
+        if (this.textAlignment == 'LEFT') {
           alignment = s.LEFT;
           x = margin;
-        } else if (this.textAlignment == "CENTER") {
+        } else if (this.textAlignment == 'CENTER') {
           alignment = s.CENTER;
           x = margin;
           w = s.width - 2 * margin;
@@ -667,14 +667,14 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap");
-@import "@/assets/css/_definitions.scss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap');
+@import '@/assets/css/_definitions.scss';
 
 body {
   margin: 0;
   &,
   * {
-    font-family: "Inter", sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     @include fs(0);
   }
 }
