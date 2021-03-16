@@ -51,6 +51,11 @@
         :checked="format == 'instagram_feed'"
         label="Feed"
         @change="changeFormat"
+        v-if="
+          configRef.editions[edition].socialMediaFormats.includes(
+            'instagram_feed'
+          )
+        "
       />
       <nice-radio
         img-src="img/instagram-brands.svg"
@@ -60,6 +65,11 @@
         :checked="format == 'instagram_stories'"
         label="Stories"
         @change="changeFormat"
+        v-if="
+          configRef.editions[edition].socialMediaFormats.includes(
+            'instagram_stories'
+          )
+        "
       />
       <nice-radio
         img-src="img/facebook-brands.svg"
@@ -69,6 +79,11 @@
         :checked="format == 'facebook_feed'"
         label="Facebook"
         @change="changeFormat"
+        v-if="
+          configRef.editions[edition].socialMediaFormats.includes(
+            'facebook_feed'
+          )
+        "
       />
       <nice-radio
         img-src="img/twitter-brands.svg"
@@ -78,6 +93,11 @@
         :checked="format == 'twitter_feed'"
         label="Twitter"
         @change="changeFormat"
+        v-if="
+          configRef.editions[edition].socialMediaFormats.includes(
+            'twitter_feed'
+          )
+        "
       />
     </panel>
     <panel
@@ -215,6 +235,16 @@
       title="Escolha de padrão gráfico tematizado"
     >
       <nice-radio
+        img-src="img/icons/pattern-icons/interview.svg"
+        img-alt="Ícone representando depoimento"
+        radio-name="pattern_selection"
+        radio-value="testimony"
+        label="Depoimento"
+        :checked="pattern == 'testimony'"
+        @change="changePattern"
+        v-if="configRef.editions[edition].patterns.includes('testimony')"
+      />
+      <nice-radio
         img-src="img/icons/pattern-icons/ico00.svg"
         img-alt="Ícone representando nenhum padrão"
         radio-name="pattern_selection"
@@ -222,6 +252,7 @@
         label="Nenhum"
         :checked="pattern == 'none'"
         @change="changePattern"
+        v-if="configRef.editions[edition].patterns.includes('none')"
       />
       <nice-radio
         img-src="img/icons/pattern-icons/ico01.svg"
@@ -231,6 +262,7 @@
         label="Circular"
         :checked="pattern == 'circle'"
         @change="changePattern"
+        v-if="configRef.editions[edition].patterns.includes('circle')"
       />
       <nice-radio
         img-src="img/icons/pattern-icons/ico02.svg"
@@ -240,6 +272,7 @@
         label="Borda"
         :checked="pattern == 'border'"
         @change="changePattern"
+        v-if="configRef.editions[edition].patterns.includes('border')"
       />
       <nice-radio
         img-src="img/icons/pattern-icons/ico03.svg"
@@ -249,6 +282,7 @@
         label="Pleno"
         :checked="pattern == 'full'"
         @change="changePattern"
+        v-if="configRef.editions[edition].patterns.includes('full')"
       />
       <nice-radio
         img-src="img/icons/pattern-icons/ico04.svg"
@@ -258,6 +292,7 @@
         label="⅓"
         :checked="pattern == 'one_third'"
         @change="changePattern"
+        v-if="configRef.editions[edition].patterns.includes('one_third')"
       />
       <nice-radio
         img-src="img/icons/pattern-icons/ico05.svg"
@@ -267,6 +302,7 @@
         label="⅔"
         :checked="pattern == 'two_thirds'"
         @change="changePattern"
+        v-if="configRef.editions[edition].patterns.includes('two_thirds')"
       />
     </panel>
 
@@ -275,6 +311,13 @@
       :class="{ 'visible-panel': currentPanel == 'edition' }"
       title="Edições da ONHB"
     >
+      <nice-radio
+        radio-name="onhb_edition"
+        radio-value="Depoimento"
+        label="Depoimento"
+        :checked="edition == 'Depoimento'"
+        @change="changeEdition"
+      />
       <nice-radio
         radio-name="onhb_edition"
         radio-value="ONHB13"
@@ -353,6 +396,24 @@ export default {
       this.p5instance.updateFormat();
     },
     edition: function() {
+      // checks to see if the currently selected pattern exists in the
+      // newly selected edition. If not, sets its value to the first
+      // available pattern set in the edition's config file
+      if (
+        !this.configRef.editions[this.edition].patterns.includes(this.pattern)
+      ) {
+        this.pattern = this.configRef.editions[this.edition].patterns[0];
+      }
+      if (
+        !this.configRef.editions[this.edition].socialMediaFormats.includes(
+          this.format
+        )
+      ) {
+        this.format = this.configRef.editions[
+          this.edition
+        ].socialMediaFormats[0];
+      }
+
       this.p5instance.redraw();
     },
     pattern: function() {

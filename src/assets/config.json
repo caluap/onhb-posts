@@ -6,21 +6,83 @@
     "instagram_stories": { "w": 1080, "h": 1920, "font_adjust": 1.6 }
   },
   "editions": {
+    "Depoimento": {
+      "tintPattern": false,
+      "background": "#000000",
+      "patterns": ["testimony"],
+      "socialMediaFormats": ["instagram_feed"]
+    },
     "ONHB13": {
       "tintPattern": false,
-      "background": "#000000"
+      "background": "#000000",
+      "patterns": [
+        "none",
+        "circle",
+        "border",
+        "full",
+        "one_third",
+        "two_thirds"
+      ],
+      "socialMediaFormats": [
+        "facebook_feed",
+        "twitter_feed",
+        "instagram_feed",
+        "instagram_stories"
+      ]
     },
     "ONHB12": {
       "tintPattern": true,
-      "background": "#000000"
+      "background": "#000000",
+      "patterns": [
+        "none",
+        "circle",
+        "border",
+        "full",
+        "one_third",
+        "two_thirds"
+      ],
+      "socialMediaFormats": [
+        "facebook_feed",
+        "twitter_feed",
+        "instagram_feed",
+        "instagram_stories"
+      ]
     },
     "Pré-2020": {
       "tintPattern": false,
-      "background": "#cb0072"
+      "background": "#cb0072",
+      "patterns": [
+        "none",
+        "circle",
+        "border",
+        "full",
+        "one_third",
+        "two_thirds"
+      ],
+      "socialMediaFormats": [
+        "facebook_feed",
+        "twitter_feed",
+        "instagram_feed",
+        "instagram_stories"
+      ]
     },
     "Neutro": {
       "tintPattern": false,
-      "background": "#000000"
+      "background": "#000000",
+      "patterns": [
+        "none",
+        "circle",
+        "border",
+        "full",
+        "one_third",
+        "two_thirds"
+      ],
+      "socialMediaFormats": [
+        "facebook_feed",
+        "twitter_feed",
+        "instagram_feed",
+        "instagram_stories"
+      ]
     }
   }
 }
