@@ -748,7 +748,7 @@ export default {
             this.configRef.formats[this.format].font_adjust;
 
         if (this.edition == 'Depoimento') {
-          let xT = 540;
+          let xT = 500;
           yMainText = margin * 2;
 
           s.textSize(fsMainText);
@@ -758,9 +758,9 @@ export default {
 
           s.text(
             this.mainText,
-            xT,
+            xT - 10,
             yMainText,
-            s.width - xT - margin * 2,
+            s.width - xT - margin * 2 + 20,
             s.height - yMainText * 2
           );
 
