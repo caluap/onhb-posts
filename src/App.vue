@@ -599,32 +599,46 @@ export default {
 
       s.drawImages = () => {
         if (userImg) {
-          s.tint(203, 0, 114);
-          let ratio,
-            rCanv = s.width / s.height,
-            rImg = userImg.width / userImg.height;
-
-          if (rCanv >= rImg) {
-            ratio = s.width / userImg.width;
+          if (this.edition == 'Depoimento') {
+            let x = 56,
+              y = 59,
+              w = 362;
+            let minDim = Math.min(originalUserImg.width, userImg.height);
+            let crop = originalUserImg.get(
+              (originalUserImg.width - minDim) / 2,
+              (originalUserImg.height - minDim) / 2,
+              minDim,
+              minDim
+            );
+            s.image(crop, x, y, w, w);
           } else {
-            ratio = s.height / userImg.height;
-          }
-          let newW = userImg.width * ratio,
-            newH = userImg.height * ratio,
-            x = s.width / 2 - newW / 2,
-            y = s.height / 2 - newH / 2;
+            s.tint(203, 0, 114);
+            let ratio,
+              rCanv = s.width / s.height,
+              rImg = userImg.width / userImg.height;
 
-          s.image(userImg, x, y, newW, newH);
+            if (rCanv >= rImg) {
+              ratio = s.width / userImg.width;
+            } else {
+              ratio = s.height / userImg.height;
+            }
+            let newW = userImg.width * ratio,
+              newH = userImg.height * ratio,
+              x = s.width / 2 - newW / 2,
+              y = s.height / 2 - newH / 2;
 
-          if (this.tintImage) {
-            let alpha = 255 * (1 - this.tint);
-            s.tint(255, alpha);
-          } else {
+            s.image(userImg, x, y, newW, newH);
+
+            if (this.tintImage) {
+              let alpha = 255 * (1 - this.tint);
+              s.tint(255, alpha);
+            } else {
+              s.noTint();
+            }
+
+            s.image(originalUserImg, x, y, newW, newH);
             s.noTint();
           }
-
-          s.image(originalUserImg, x, y, newW, newH);
-          s.noTint();
         }
       };
 
