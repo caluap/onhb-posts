@@ -227,6 +227,22 @@
       </template>
 
       <template v-if="edition == 'Depoimento'">
+        <div class="range-container">
+          <label class="label-panel minor-label" for="end-quotes"
+            >Posição do fecha aspas</label
+          >
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.001"
+            id="end-quotes"
+            v-model="endQuotesY"
+          />
+        </div>
+
+        <hr class="divider" />
+
         <label class="label-panel" for="testimony-name">Nome do depoente</label>
         <input
           type="text"
@@ -406,6 +422,7 @@ export default {
       testimonyName: '',
       testimonyOrigin: '',
       auxiliaryText: '',
+      endQuotesY: 1,
       auxiliaryTextY: 0.5,
       auxiliaryTextFontSize: 0.2,
       dirty: false,
@@ -466,6 +483,9 @@ export default {
       this.p5instance.redraw();
     },
     auxiliaryTextFontSize: function() {
+      this.p5instance.redraw();
+    },
+    endQuotesY: function() {
       this.p5instance.redraw();
     },
   },
@@ -748,7 +768,11 @@ export default {
           s.textSize(240);
           s.fill(47, 218, 190);
           s.text('“', xT - 120, margin + 10);
-          s.text('”', s.width - 140, s.height - margin - 90);
+          s.text(
+            '”',
+            s.width - 140,
+            margin + 10 + (s.height - 2 * margin - 60) * this.endQuotesY
+          );
 
           // Name and origin
           s.fill(255);
