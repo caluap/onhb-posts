@@ -789,6 +789,7 @@ export default {
             s.width - xT - margin * 3,
             s.height - margin - y
           );
+          // not depoimento?
         } else {
           w = s.width - margin * 2;
           yMainText = (s.height - 2 * margin) * this.mainTextY + margin;
@@ -806,7 +807,7 @@ export default {
           }
           s.textAlign(alignment, s.TOP);
           s.textSize(fsMainText);
-          s.textLeading((fsAuxText * 4) / 3);
+          s.textLeading((fsMainText * 4) / 3);
           s.fill(255);
           s.text(this.mainText, x, yMainText, w, s.height - yMainText);
 
