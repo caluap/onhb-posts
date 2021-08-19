@@ -12,6 +12,24 @@
       "patterns": ["testimony"],
       "socialMediaFormats": ["instagram_feed"]
     },
+    "ONHBA1": {
+      "tintPattern": false,
+      "background": "#67053e",
+      "patterns": [
+        "none",
+        "circle",
+        "border",
+        "full",
+        "one_third",
+        "two_thirds"
+      ],
+      "socialMediaFormats": [
+        "facebook_feed",
+        "twitter_feed",
+        "instagram_feed",
+        "instagram_stories"
+      ]
+    },
     "ONHB13": {
       "tintPattern": false,
       "background": "#000000",
