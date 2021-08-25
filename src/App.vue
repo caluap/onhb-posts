@@ -406,44 +406,44 @@
 </template>
 
 <script>
-import P5 from "p5";
-import json from "@/assets/config.json";
-import Panel from "./components/Panel";
-import PanelToggle from "./components/PanelToggle.vue";
-import NiceRadio from "./components/NiceRadio.vue";
+import P5 from 'p5';
+import json from '@/assets/config.json';
+import Panel from './components/Panel';
+import PanelToggle from './components/PanelToggle.vue';
+import NiceRadio from './components/NiceRadio.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
-      currentPanel: "",
+      currentPanel: '',
       sketch: null,
       p5instance: null,
-      textAlignment: "LEFT",
+      textAlignment: 'LEFT',
       canvas: null,
       configRef: json,
       tint: 1.0,
-      mainText: "",
+      mainText: '',
       mainTextY: 0.1,
       mainTextFontSize: 0.2,
-      testimonyName: "",
-      testimonyOrigin: "",
-      auxiliaryText: "",
+      testimonyName: '',
+      testimonyOrigin: '',
+      auxiliaryText: '',
       endQuotesY: 1,
       auxiliaryTextY: 0.5,
       auxiliaryTextFontSize: 0.2,
       dirty: false,
       tintImage: true,
-      pattern: "none",
-      format: "facebook_feed",
+      pattern: 'none',
+      format: 'facebook_feed',
       formats: {
-        facebook_feed: "Facebook",
-        twitter_feed: "Twitter",
-        instagram_feed: "Timeline Instagram",
-        instagram_stories: "Stories Instagram"
+        facebook_feed: 'Facebook',
+        twitter_feed: 'Twitter',
+        instagram_feed: 'Timeline Instagram',
+        instagram_stories: 'Stories Instagram',
       },
-      edition: "ONHBA1",
-      editions: ["ONHBA1", "ONHB13", "ONHB12", "Pré-2020", "Neutro"]
+      edition: 'ONHBA1',
+      editions: ['ONHBA1', 'ONHB13', 'ONHB12', 'Pré-2020', 'Neutro'],
     };
   },
   watch: {
@@ -494,7 +494,7 @@ export default {
     },
     endQuotesY: function() {
       this.p5instance.redraw();
-    }
+    },
   },
   components: { Panel, PanelToggle, NiceRadio },
   updated: function() {
@@ -524,26 +524,26 @@ export default {
     changePattern: function(newPattern) {
       this.pattern = newPattern;
     },
-    openPanel: function(whichPanel = "") {
+    openPanel: function(whichPanel = '') {
       // will close a currently opened panel
-      if (this.currentPanel == whichPanel || whichPanel === "") {
-        this.currentPanel = "";
+      if (this.currentPanel == whichPanel || whichPanel === '') {
+        this.currentPanel = '';
         this.dirty = true;
       } else {
         // is opening a currently closed panel space
-        if (this.currentPanel == "") {
+        if (this.currentPanel == '') {
           this.dirty = true;
         }
         this.currentPanel = whichPanel;
       }
-    }
+    },
   },
   mounted() {
-    this.sketch = s => {
+    this.sketch = (s) => {
       let mainFont,
         auxFont,
-        auxFont2,
-        logo,
+        // auxFont2,
+        logos,
         userImg = null,
         originalUserImg = null,
         loadedPatterns = {},
@@ -554,10 +554,20 @@ export default {
       };
 
       s.preload = () => {
-        mainFont = s.loadFont("./fonts/CooperHewitt-Semibold.otf");
-        auxFont = s.loadFont("./fonts/CooperHewitt-Book.otf");
-        auxFont2 = s.loadFont("./fonts/CooperHewitt-MediumItalic.otf");
-        logo = s.loadImage("./img/logo.png");
+        mainFont = s.loadFont('./fonts/CooperHewitt-Semibold.otf');
+        auxFont = s.loadFont('./fonts/CooperHewitt-Book.otf');
+        // auxFont2 = s.loadFont('./fonts/CooperHewitt-MediumItalic.otf');
+        logos = {
+          default: s.loadImage('./img/logo.png'),
+        };
+
+        for (const edition in this.configRef.editions) {
+          if ('alternate_logo' in this.configRef.editions[edition]) {
+            logos[edition] = s.loadImage(
+              this.configRef.editions[edition].alternate_logo
+            );
+          }
+        }
       };
 
       s.setup = () => {
@@ -567,29 +577,29 @@ export default {
         );
 
         let imgInput = s.createFileInput(s.handleUpload);
-        imgInput.id("img-upload");
-        let container = s.select("#img-input-container");
+        imgInput.id('img-upload');
+        let container = s.select('#img-input-container');
         container.child(imgInput);
 
-        this.canvas.parent("canvas-container");
+        this.canvas.parent('canvas-container');
         s.updateZoom();
-        console.log(`${mainFont}/${auxFont}/${auxFont2}`);
+        // console.log(`${mainFont}/${auxFont}/${auxFont2}`);
       };
 
       s.updateZoom = () => {
         // debugger; // eslint-disable-line no-debugger
-        let availableHSpace = document.getElementById("desktop").clientHeight,
-          availableWSpace = document.getElementById("desktop").clientWidth;
+        let availableHSpace = document.getElementById('desktop').clientHeight,
+          availableWSpace = document.getElementById('desktop').clientWidth;
 
-        let el = document.getElementsByClassName("visible-panel");
+        let el = document.getElementsByClassName('visible-panel');
         if (el.length > 0) {
           let w = el[0].clientWidth;
           availableWSpace -= w;
           document.getElementById(
-            "canvas-container"
+            'canvas-container'
           ).style.paddingLeft = `${w}px`;
         } else {
-          document.getElementById("canvas-container").style.paddingLeft = `0`;
+          document.getElementById('canvas-container').style.paddingLeft = `0`;
         }
 
         let ratioH = availableHSpace / this.configRef.formats[this.format].h,
@@ -618,15 +628,15 @@ export default {
 
       s.saveImg = () => {
         let now = new Date();
-        let clock = now.getHours() + "·" + now.getMinutes();
+        let clock = now.getHours() + '·' + now.getMinutes();
         let day = now.toJSON().slice(0, 10);
         let fn = `post-${day}-${clock}.jpg`;
-        s.saveCanvas(this.canvas, fn, "jpg");
+        s.saveCanvas(this.canvas, fn, 'jpg');
       };
 
       s.drawImages = () => {
         if (userImg) {
-          if (this.edition == "Depoimento") {
+          if (this.edition == 'Depoimento') {
             let x = 56,
               y = 59,
               w = 362;
@@ -669,8 +679,8 @@ export default {
         }
       };
 
-      s.handleUpload = file => {
-        if (file.type === "image") {
+      s.handleUpload = (file) => {
+        if (file.type === 'image') {
           userImg = s.loadImage(file.data, () => {
             originalUserImg = userImg.get();
             console.log(originalUserImg);
@@ -689,7 +699,7 @@ export default {
       };
 
       s.drawPattern = () => {
-        if (this.pattern != "none") {
+        if (this.pattern != 'none') {
           // first time for a given edition
           if (!(this.edition in loadedPatterns)) {
             loadedPatterns[this.edition] = {};
@@ -714,9 +724,9 @@ export default {
           } else {
             if (this.configRef.editions[this.edition].tintPattern) {
               if (userImg) {
-                s.tint("#ff008f");
+                s.tint('#ff008f');
               } else {
-                s.tint("#cb0072");
+                s.tint('#cb0072');
               }
             }
             s.image(
@@ -732,16 +742,25 @@ export default {
       };
 
       s.drawLogo = () => {
-        let x, y, logoSize;
+        let logo;
+        if (this.edition in logos) {
+          logo = logos[this.edition];
+        } else {
+          logo = logos.default;
+        }
 
-        logoSize = Math.max(s.width * 0.1, 90);
-        y = s.height - margin - logoSize;
-        if (this.edition == "Depoimento") {
+        let x, y, logoH, logoW;
+
+        logoH = Math.max(s.height * 0.1, 90);
+        y = s.height - margin - logoH;
+        logoW = logo.width * (logoH / logo.height);
+
+        if (this.edition == 'Depoimento') {
           x = margin;
         } else {
-          x = s.width - margin - logoSize;
+          x = s.width - margin - logoW;
         }
-        s.image(logo, x, y, logoSize, logoSize);
+        s.image(logo, x, y, logoW, logoH);
       };
 
       s.drawText = () => {
@@ -754,7 +773,7 @@ export default {
             this.mainTextFontSize *
             this.configRef.formats[this.format].font_adjust;
 
-        if (this.edition == "Depoimento") {
+        if (this.edition == 'Depoimento') {
           let xT = 500;
           yMainText = margin * 2;
 
@@ -774,9 +793,9 @@ export default {
           // Quote marks
           s.textSize(240);
           s.fill(47, 218, 190);
-          s.text("“", xT - 120, margin + 10);
+          s.text('“', xT - 120, margin + 10);
           s.text(
-            "”",
+            '”',
             s.width - 140,
             margin + 10 + (s.height - 2 * margin - 60) * this.endQuotesY
           );
@@ -801,10 +820,10 @@ export default {
           w = s.width - margin * 2;
           yMainText = (s.height - 2 * margin) * this.mainTextY + margin;
 
-          if (this.textAlignment == "LEFT") {
+          if (this.textAlignment == 'LEFT') {
             alignment = s.LEFT;
             x = margin;
-          } else if (this.textAlignment == "CENTER") {
+          } else if (this.textAlignment == 'CENTER') {
             alignment = s.CENTER;
             x = margin;
             w = s.width - 2 * margin;
@@ -849,19 +868,19 @@ export default {
     };
 
     this.p5instance = new P5(this.sketch, this.canvas);
-  }
+  },
 };
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap");
-@import "@/assets/css/_definitions.scss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap');
+@import '@/assets/css/_definitions.scss';
 
 body {
   margin: 0;
   &,
   * {
-    font-family: "Inter", sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     @include fs(0);
   }
 }
@@ -994,7 +1013,7 @@ canvas {
   border-bottom: 2px solid rgba(0, 0, 0, 0.125);
 }
 
-input[type="text"] {
+input[type='text'] {
   border: none;
 }
 

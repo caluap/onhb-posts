@@ -15,6 +15,7 @@
     "ONHBA1": {
       "tintPattern": false,
       "background": "#67053e",
+      "alternate_logo": "./img/logos_onhba.png",
       "patterns": [
         "none",
         "circle",
